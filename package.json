@@ -1,0 +1,19 @@
+{
+	"name": "sveltekit-pwa-template",
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/kit": "1.7.2",
+		"svelte": "^3.55.1",
+		"svelte-check": "^3.0.3",
+		"tslib": "^2.5.0",
+		"typescript": "^4.9.5",
+		"vite": "^4.1.2"
+	}
+}
