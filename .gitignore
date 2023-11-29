@@ -5,3 +5,4 @@ node_modules
 /package
 .env
 package-lock.json
+pnpm-lock.yaml
