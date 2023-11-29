@@ -17,18 +17,6 @@
   $: isSuccessful = false;
   $: canCheckInToday = false;
 
-  function handleCheckIn() {
-    // if (canCheckInToday) {
-    // checkInStore.recordCheckIn();
-    // } else {
-    // toast.push("Max check-ins reached for today.");
-    // Handle max check-in scenario
-    // throw Error("Max check-ins reached for today.");
-    // }
-    connectToDevice();
-  }
-
-  // Client API:
   const { form, errors, constraints, enhance, capture, restore } = superForm(
     data.form,
     {
@@ -44,7 +32,7 @@
         // Form validation
         if (form.valid) {
           // TODO: Do something with the validated form.data
-          handleCheckIn();
+          connectToDevice();
         }
       },
     }
@@ -59,7 +47,7 @@
         isConnected = true;
         await sendData($form.studentNumber).then(() => {
           isSuccessful = true;
-          toast.success('Successfully toasted!');
+          toast.success("Checked-In!");
           disconnect(device);
           isConnected = false;
         });
@@ -70,7 +58,6 @@
         isSuccessful = false;
       }
     } catch (error) {
-      console.error("Error connecting to BLE device:", error);
       toast.error("Error connecting to BLE device.");
       disconnect(device);
       isConnected = false;
@@ -96,7 +83,7 @@
       {/if}
     </div>
     <form method="POST" use:enhance>
-      <div class="space-y-12  w-full">
+      <div class="space-y-12 w-full">
         <div class="border-b border-blue-900/10 pb-12">
           <h2 class="text-base font-semibold leading-7 text-blue-600">
             BLE Check-In

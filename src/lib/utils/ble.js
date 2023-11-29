@@ -22,9 +22,8 @@ export async function sendData(studentNumber) {
     const dataArray = new TextEncoder().encode(studentNumber);
     await characteristic.writeValue(dataArray);
 
-    console.log("Student number sent successfully:", studentNumber);
   } catch (error) {
-    console.error("Error sending student number:", error);
+    throw error;
   } finally {
     if (server) {
       await server.disconnect(device);
@@ -49,12 +48,8 @@ export async function connect() {
     characteristic = await server
       .getPrimaryService(SERVICE_UUID)
       .then((service) => service.getCharacteristic(CHARACTERISTIC_UUID));
-
-
-    console.log("Connected to NX10");
     return device;
   } catch (error) {
-    console.error("Error connecting to BLE device:", error);
     throw error;
   }
 }
@@ -65,6 +60,5 @@ export async function connect() {
 export function disconnect(device) {
   if (device) {
     device.gatt.disconnect();
-    console.log("Disconnected from NX10");
   }
 }
