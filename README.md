@@ -2,7 +2,7 @@
 
 An IoT BLE Attendance Register using Xiao ESP32C3 BLE and SvelteKit PWA.
 
-Experimenting with the [Web Bluetooth API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API) to provide the ability to connect and interact with Bluetooth Low Energy via Browser.
+Experimenting with the [Web Bluetooth API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API) to provide the ability to connect and interact with Bluetooth Low Energy via the Browsers.
 
 ## Technologies Used
 
