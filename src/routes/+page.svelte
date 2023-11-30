@@ -2,20 +2,17 @@
   import { onMount } from "svelte";
   import { disconnect, sendData, connect } from "$lib/utils/ble.js";
   import toast, { Toaster } from "svelte-french-toast";
-  import Searching from "$lib/components/Searching.svelte";
-  import CheckedIn from "$lib/components/CheckedIn.svelte";
   import type { PageData } from "./$types";
   import { superForm } from "sveltekit-superforms/client";
   import { _userSchema } from "./+page";
-  import { checkInStore } from "$lib/stores/checkInStores";
+  import BleStatus from "$lib/components/BLEStatus.svelte";
+  import { checkedInStore,triggerReset } from "$lib/stores/checkedInStores";
 
   export let data: PageData;
 
   let device: unknown;
 
   $: isConnected = false;
-  $: isSuccessful = false;
-  $: canCheckInToday = false;
 
   const { form, errors, constraints, enhance, capture, restore } = superForm(
     data.form,
@@ -23,6 +20,7 @@
       SPA: true,
       validators: _userSchema,
       applyAction: true,
+      taintedMessage: null,
       scrollToError: "smooth",
       autoFocusOnError: "detect",
       // On ActionResult error, render the nearest +error.svelte page
@@ -46,16 +44,17 @@
         device = await connect();
         isConnected = true;
         await sendData($form.studentNumber).then(() => {
-          isSuccessful = true;
+          $checkedInStore = true;
           toast.success("Checked-In!");
           disconnect(device);
           isConnected = false;
+
+        triggerReset(3000);
         });
       } else {
         disconnect(device);
-        toast.error("Something went wrong.");
         isConnected = false;
-        isSuccessful = false;
+        $checkedInStore = false;
       }
     } catch (error) {
       toast.error("Error connecting to BLE device.");
@@ -63,12 +62,6 @@
       isConnected = false;
     }
   };
-
-  onMount(() => {
-    checkInStore.canCheckIn()
-      ? (canCheckInToday = true)
-      : (canCheckInToday = false);
-  });
 </script>
 
 <main>
@@ -76,11 +69,7 @@
   <div class="flex flex-col items-center justify-center min-h-screen">
     <!-- Your centered content goes here -->
     <div class="p-8">
-      {#if isSuccessful}
-        <CheckedIn></CheckedIn>
-      {:else}
-        <Searching></Searching>
-      {/if}
+     <BleStatus isSuccessful={$checkedInStore}></BleStatus>
     </div>
     <form method="POST" use:enhance>
       <div class="space-y-12 w-full">
@@ -88,7 +77,7 @@
           <h2 class="text-base font-semibold leading-7 text-blue-600">
             BLE Check-In
           </h2>
-          <p class="mt-1 text-sm leading-6 text-blue-600">
+          <p class="mt-1 text-sm leading-6 text-blue-300">
             Please check-in as you enter class.
           </p>
 
@@ -104,7 +93,7 @@
                   type="text"
                   name="student-number"
                   id="student-number"
-                  placeholder="Student Number"
+                  placeholder="P00"
                   bind:value={$form.studentNumber}
                   {...$constraints.studentNumber}
                   class="block w-full rounded-md border-0 py-1.5 text-blue-500 shadow-sm ring-1 ring-inset ring-blue-300 placeholder:text-blue-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"

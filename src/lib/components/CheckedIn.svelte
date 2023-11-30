@@ -1,6 +1,5 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
-  import bluetoothIcon from "@iconify/icons-bx/bluetooth";
   import userCheck from "@iconify/icons-bx/user-check";
 </script>
 
