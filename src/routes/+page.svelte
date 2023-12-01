@@ -7,12 +7,42 @@
   import { _userSchema } from "./+page";
   import BleStatus from "$lib/components/BLEStatus.svelte";
   import { checkedInStore, triggerReset } from "$lib/stores/checkedInStores";
+  import { DiplomaClass } from "$lib/utils/geofencing";
 
   export let data: PageData;
 
   let device: unknown;
+  let lat: String;
+  let long: String;
+  let isOnCampus: String;
+
+  function success(position: any) {
+    lat = position.coords.latitude;
+    long = position.coords.longitude;
+
+    if (DiplomaClass.inside(lat, long)) {
+     isOnCampus = "Yes You Are";
+    } else {
+      isOnCampus = "Not Yet";
+    }
+  }
+
+  function error() {
+    toast.error("Sorry, no position available.");
+  }
+
+  const options = {
+    enableHighAccuracy: true,
+    maximumAge: 30000,
+    timeout: 27000,
+  };
 
   $: isConnected = false;
+
+  onMount(() => {
+    // Watch Live Location
+    navigator.geolocation.watchPosition(success, error, options);
+  });
 
   const { form, errors, constraints, enhance, capture, restore } = superForm(
     data.form,
@@ -66,6 +96,15 @@
 
 <main>
   <Toaster />
+  <p class="mt-1 text-center font-medium leading-6 text-blue-500 pt-10">
+    Are you on campus?
+  </p>
+  <p class="mt-1 text-center text-sm leading-6 text-blue-300">
+    Lat: {lat}, Long: {long}
+  </p>
+  <p class="mt-1 text-center text-sm leading-6 text-blue-300">
+   {isOnCampus}
+  </p>
   <div class="flex flex-col items-center justify-center min-h-screen">
     <!-- Your centered content goes here -->
     <div class="p-8">
@@ -73,7 +112,7 @@
     </div>
     <form method="POST" use:enhance>
       <div class="space-y-12 w-full">
-        <div class="border-b border-blue-900/10 pb-12">
+        <div class="border-b border-blue-900/10 pb-4">
           <h2 class="text-base font-semibold leading-7 text-blue-600">
             BLE Check-In
           </h2>
