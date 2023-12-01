@@ -1,3 +1,5 @@
+let SERVICE_UUID = import.meta.env.VITE_SERVICE_UUID;
+let CHARACTERISTIC_UUID = import.meta.env.VITE_CHARACTERISTIC_UUID
 let device;
 let server;
 let characteristic;
@@ -11,8 +13,8 @@ export async function sendData(studentNumber) {
   let server;
   try {
     server = await device.gatt.connect();
-    const service = await server.getPrimaryService(import.meta.env.VITE_SERVICE_UUID);
-    const characteristic = await service.getCharacteristic(import.meta.env.VITE_CHARACTERISTIC_UUID);
+    const service = await server.getPrimaryService(SERVICE_UUID);
+    const characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
     // Extract the studentNumber value from the object and encode it
      // Assuming data has a studentNumber property

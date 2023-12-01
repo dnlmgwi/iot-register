@@ -7,7 +7,6 @@
   import { _userSchema } from "./+page";
   import BleStatus from "$lib/components/BLEStatus.svelte";
   import { checkedInStore, triggerReset } from "$lib/stores/checkedInStores";
-  import recaptchaEnhance from 'svelte-recaptcha-enhance';
 
   export let data: PageData;
 
@@ -72,18 +71,7 @@
     <div class="p-8">
       <BleStatus isSuccessful={$checkedInStore}></BleStatus>
     </div>
-    <form
-      method="POST"
-      use:enhance
-      use:recaptchaEnhance={{
-        siteKey: import.meta.env.VITE_SITEKEY,
-        callback:
-          ({ formData }) =>
-          ({ result }) => {
-            alert(result.data.message);
-          },
-      }}
-    >
+    <form method="POST" use:enhance>
       <div class="space-y-12 w-full">
         <div class="border-b border-blue-900/10 pb-12">
           <h2 class="text-base font-semibold leading-7 text-blue-600">
