@@ -15,8 +15,8 @@
 
   $: lat = 0;
   $: long = 0;
-  
-  let isOnCampus: String;
+
+  let isOnCampus = "Loading...";
 
   function success(position: any) {
     lat = position.coords.latitude;
