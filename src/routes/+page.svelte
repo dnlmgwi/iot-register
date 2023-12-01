@@ -12,8 +12,10 @@
   export let data: PageData;
 
   let device: unknown;
-  let lat: String;
-  let long: String;
+
+  $: lat = 0;
+  $: long = 0;
+  
   let isOnCampus: String;
 
   function success(position: any) {
