@@ -35,7 +35,7 @@ export const DiplomaClass = new CircularGeofenceRegion({
   name: 'NACIT Lilongwe, Diploma',
   latitude: -13.9736485,
   longitude: 33.7711613,
-  radius: 10 // meters
+  radius: 5 // meters
 });
 
 export const DiplomaLab1Class = new CircularGeofenceRegion({
