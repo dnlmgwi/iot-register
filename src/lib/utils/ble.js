@@ -1,6 +1,3 @@
-const SERVICE_UUID = "12345678-1234-1234-1234-123456789abc"; // Replace with your service UUID
-const CHARACTERISTIC_UUID = "87654321-4321-4321-4321-abcdef123456"; // Replace with your characteristic UUID
-
 let device;
 let server;
 let characteristic;
@@ -14,8 +11,8 @@ export async function sendData(studentNumber) {
   let server;
   try {
     server = await device.gatt.connect();
-    const service = await server.getPrimaryService(SERVICE_UUID);
-    const characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+    const service = await server.getPrimaryService(import.meta.env.VITE_SERVICE_UUID);
+    const characteristic = await service.getCharacteristic(import.meta.env.VITE_CHARACTERISTIC_UUID);
 
     // Extract the studentNumber value from the object and encode it
      // Assuming data has a studentNumber property

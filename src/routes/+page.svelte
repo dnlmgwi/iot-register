@@ -6,7 +6,8 @@
   import { superForm } from "sveltekit-superforms/client";
   import { _userSchema } from "./+page";
   import BleStatus from "$lib/components/BLEStatus.svelte";
-  import { checkedInStore,triggerReset } from "$lib/stores/checkedInStores";
+  import { checkedInStore, triggerReset } from "$lib/stores/checkedInStores";
+  import recaptchaEnhance from 'svelte-recaptcha-enhance';
 
   export let data: PageData;
 
@@ -49,7 +50,7 @@
           disconnect(device);
           isConnected = false;
 
-        triggerReset(3000);
+          triggerReset(3000);
         });
       } else {
         disconnect(device);
@@ -69,9 +70,20 @@
   <div class="flex flex-col items-center justify-center min-h-screen">
     <!-- Your centered content goes here -->
     <div class="p-8">
-     <BleStatus isSuccessful={$checkedInStore}></BleStatus>
+      <BleStatus isSuccessful={$checkedInStore}></BleStatus>
     </div>
-    <form method="POST" use:enhance>
+    <form
+      method="POST"
+      use:enhance
+      use:recaptchaEnhance={{
+        siteKey: import.meta.env.VITE_SITEKEY,
+        callback:
+          ({ formData }) =>
+          ({ result }) => {
+            alert(result.data.message);
+          },
+      }}
+    >
       <div class="space-y-12 w-full">
         <div class="border-b border-blue-900/10 pb-12">
           <h2 class="text-base font-semibold leading-7 text-blue-600">
