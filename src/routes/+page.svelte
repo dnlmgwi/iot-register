@@ -75,21 +75,27 @@
       if (!isConnected) {
         device = await connect();
         isConnected = true;
-        await sendData($form.studentNumber).then(() => {
-          $checkedInStore = true;
-          toast.success("Checked-In!");
-          disconnect(device);
-          isConnected = false;
-
-          triggerReset(3000);
-        });
+        //Better Waiting Experience
+        toast.promise(
+          sendData($form.studentNumber).then(() => {
+            $checkedInStore = true;
+            disconnect(device);
+            isConnected = false;
+            triggerReset(3000);
+          }),
+          {
+            loading: "Processing",
+            success: "Checked-In!",
+            error: "Please, Try Again",
+          }
+        );
       } else {
         disconnect(device);
         isConnected = false;
         $checkedInStore = false;
       }
     } catch (error) {
-      toast.error("Error connecting to BLE device.");
+      toast.error("BLE Connection Failed");
       disconnect(device);
       isConnected = false;
     }
