@@ -13,6 +13,10 @@
     <Icon icon='solar:settings-linear' width="25" height="25"></Icon>
     <a class="nav-link" href="/settings">Settings</a>
   </div>
+  <div class="nav-link-with-icon">
+    <Icon icon='solar:settings-linear' width="25" height="25"></Icon>
+    <a class="nav-link" href="/profile">profile</a>
+  </div>
   </aside>
 <style>
 
