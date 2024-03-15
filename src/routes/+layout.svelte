@@ -14,27 +14,3 @@
 </svelte:head>
 
   <section><slot /></section>
-
-
-<style>
-  .container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-  }
-
-  aside {
-    background-color: grey;
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .nav-link {
-    padding: 1rem;
-  }
-
-  section {
-    width: 100%;
-  }
-</style>
