@@ -35,8 +35,8 @@
 
   const options = {
     enableHighAccuracy: true,
-    maximumAge: 30000,
-    timeout: 27000,
+    maximumAge: 5000,
+    timeout: 7000,
   };
 
   $: isConnected = false;
