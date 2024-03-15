@@ -34,7 +34,7 @@
   }
 
   const options = {
-    enableHighAccuracy: true,
+    enableHighAccuracy: false,
     maximumAge: 5000,
     timeout: 7000,
   };

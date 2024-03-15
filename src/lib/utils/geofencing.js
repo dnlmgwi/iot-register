@@ -38,18 +38,3 @@ export const DiplomaClass = new CircularGeofenceRegion({
   radius: 4 // meters
 });
 
-export const DiplomaLab1Class = new CircularGeofenceRegion({
-  name: 'NACIT Lilongwe, Computer Lab',
-  latitude: -13.9736485,
-  longitude: 33.7711613,
-
-  radius: 5 // meters
-});
-
-// const fenceB = new SquareGeofenceRegion({
-//   name: 'myfence',
-//   latitude: 59.345635,
-//   longitude: 18.059707,
-//   axis: 1000 // meters in all 4 directions
-// })
-
