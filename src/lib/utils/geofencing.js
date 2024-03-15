@@ -32,16 +32,17 @@ class SquareGeofenceRegion {
 }
 
 export const DiplomaClass = new CircularGeofenceRegion({
-  name: 'NACIT Lilongwe, Diploma',
-  latitude: -13.9736485,
-  longitude: 33.7711613,
-  radius: 8 // meters
+  name: 'NACIT Resource Room',
+  latitude: -13.9739966, 
+  longitude: 33.7707999,
+  radius: 4 // meters
 });
 
 export const DiplomaLab1Class = new CircularGeofenceRegion({
   name: 'NACIT Lilongwe, Computer Lab',
   latitude: -13.9736485,
   longitude: 33.7711613,
+
   radius: 5 // meters
 });
 

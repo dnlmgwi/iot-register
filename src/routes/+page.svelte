@@ -23,7 +23,7 @@
     long = position.coords.longitude;
 
     if (DiplomaClass.inside(lat, long)) {
-     isOnCampus = "Yes You Are";
+      isOnCampus = "Yes You Are";
     } else {
       isOnCampus = "Not Yet";
     }
@@ -111,7 +111,7 @@
     Lat: {lat}, Long: {long}
   </p>
   <p class="mt-1 text-center text-sm leading-6 text-blue-300">
-   {isOnCampus}
+    {isOnCampus}
   </p>
   <div class="flex flex-col items-center justify-center min-h-screen">
     <!-- Your centered content goes here -->
@@ -150,14 +150,14 @@
           </div>
         </div>
       </div>
-
-      <div class="mt-6 flex items-center justify-center gap-x-6">
-        <button
-          class="rounded-full bg-blue-600 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Check In</button
-        >
-      </div>
+      {#if isOnCampus === "Yes You Are"}
+        <div class="mt-6 flex items-center justify-center gap-x-6">
+          <button
+            class="rounded-full bg-blue-600 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Check In</button
+          >
+        </div>{/if}
     </form>
   </div>
 </main>
