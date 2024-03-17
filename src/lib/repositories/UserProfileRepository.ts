@@ -61,7 +61,7 @@ export class UserProfileRepository {
 		return data.publicUrl;
 	}
 
-	async GetTotalAttendanceCount(student_id: string) {
+	async getTotalAttendanceCount(student_id: string) {
 		const { count, error } = await this.supabase
 			.from('register')
 			.select('*', { count: 'exact' })
@@ -78,7 +78,7 @@ export class UserProfileRepository {
 		return count;
 	}
 
-	async GetAverageEntryTime(student_id: string) {
+	async getAverageEntryTime(student_id: string) {
 		const { data, error } = await this.supabase
 			.from('register')
 			.select('created_at')
@@ -166,4 +166,32 @@ export class UserProfileRepository {
 
 	// 	return missedDays;
 	// }
+
+	async getTotalAttendancePerMonth(student_id: string) {
+		const { data } = await this.supabase
+			.from('register')
+			.select('created_at')
+			.eq('student_id', student_id);
+
+		if (!data) {
+			throw new Error('Fetching failed without a specific error.');
+		}
+
+		const monthAttendance = data.reduce((acc, row) => {
+			const monthYear = new Date(row.created_at).toLocaleString('default', {
+				month: 'short',
+				year: 'numeric'
+			});
+			if (!acc[monthYear]) {
+				acc[monthYear] = 0;
+			}
+			acc[monthYear]++;
+			return acc;
+		}, {});
+
+		return Object.entries(monthAttendance).map(([month, count]) => ({
+			Month: month,
+			AttendanceCount: count
+		}));
+	}
 }

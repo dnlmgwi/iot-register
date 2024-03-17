@@ -8,6 +8,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { GetAverageEntryTimeUseCase } from '$lib/useCases/GetAverageEntryTime';
 import { GetTotalAttendanceCountUseCase } from '$lib/useCases/GetTotalAttendanceCount';
+import { GetTotalAttendanceCountByMonthUseCase } from '$lib/useCases/GetTotalAttendanceCountByMonth.js';
 
 export const load = async ({ locals: { supabase, getSession }, request }) => {
 	const form = await superValidate(request, profileSchema);
@@ -20,6 +21,7 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 
 	const userProfileRepository = new UserProfileRepository(supabase);
 	const getUserProfile = new GetUserProfileUseCase(userProfileRepository);
+
 	const profile = await getUserProfile.execute(session.user.id);
 
 	if (!profile) {
@@ -29,9 +31,15 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 	//Get Stats
 	const getAverageEntryTime = new GetAverageEntryTimeUseCase(userProfileRepository);
 	const getTotalAttendanceCount = new GetTotalAttendanceCountUseCase(userProfileRepository);
+	const getTotalAttendanceCountByMonth = new GetTotalAttendanceCountByMonthUseCase(
+		userProfileRepository
+	);
 
 	const attendanceCount = await getTotalAttendanceCount.execute(profile.student_id);
 	const attendanceAvgEntryTime = await getAverageEntryTime.execute(profile.student_id);
+	const getTotalCountByMonth = await getTotalAttendanceCountByMonth.execute(profile.student_id);
+
+	console.log(getTotalCountByMonth);
 
 	return {
 		session,
@@ -39,7 +47,8 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 		form,
 		stats: {
 			attendanceCount: attendanceCount,
-			attendanceAvgEntryTime: attendanceAvgEntryTime
+			attendanceAvgEntryTime: attendanceAvgEntryTime,
+			attendanceCountByMonth: getTotalCountByMonth
 		}
 	};
 };

@@ -1,5 +1,6 @@
 <!-- src/routes/account/+page.svelte -->
 <script lang="ts">
+	import BarGraph from '$lib/components/BarGraph.svelte';
 	import profileSchema from '$lib/schemas/profileSchema';
 	import toast from 'svelte-french-toast';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -102,8 +103,13 @@
 								</div>
 							</div>
 
-							<div class="sm:col-span-3 select-none">
-								<!-- Item 3 -->
+							<div class="sm:col-span-6">
+								<div
+									class="flex flex-col items-center justify-center border-2 border-blue-600 rounded-md p-3"
+								>
+									<BarGraph data={data.stats.attendanceCountByMonth}></BarGraph>
+									<p class="text-base leading-7 text-blue-600">Total Attendance</p>
+								</div>
 							</div>
 						</div>
 					</div>
