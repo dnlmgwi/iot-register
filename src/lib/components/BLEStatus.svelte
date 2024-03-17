@@ -1,6 +1,6 @@
 <script lang="ts">
-  import CheckedIn from "./CheckedIn.svelte";
-  import Searching from "./Searching.svelte";
+	import CheckedIn from "./CheckedIn.svelte";
+	import Searching from "./Searching.svelte";
 
 
   export let isSuccessful: boolean;
