@@ -8,6 +8,7 @@
 	import { checkedInStore, triggerReset } from '$lib/stores/checkedInStores';
 	import { registerSchema } from '$lib/schemas/registerSchema';
 	import { DiplomaClass } from '$lib/utils/geofencing.js';
+	import { SignOutUseCase } from '$lib/useCases/SignOut';
 
 	export let data: PageData;
 
@@ -40,7 +41,7 @@
 
 	onMount(() => {
 		// Watch Live Location
-		navigator.geolocation.watchPosition(success, error, options);
+		// navigator.geolocation.watchPosition(success, error, options);
 	});
 
 	let device: unknown;
@@ -111,16 +112,9 @@
 <main>
 	<Toaster />
 	<div class="flex flex-col items-center justify-center min-h-screen">
-		<p class="mt-1 text-center font-medium leading-6 text-blue-500 pt-10">Are you on campus?</p>
-		<p class="mt-1 text-center text-sm leading-6 text-blue-300">
-			Lat: {lat}, Long: {long}
-		</p>
-		<p class="mt-1 text-center text-sm leading-6 text-blue-300">
-			{isOnCampus}
-		</p>
 		<div>
 			{#if session != null}
-				<div class="flex flex-row items-center gap-2">
+				<div class="flex flex-col sm:flex-row items-center gap-2">
 					<p class="text-base font-semibold leading-7 text-blue-600">
 						You are logged in as {session.user.email}
 					</p>
@@ -201,5 +195,14 @@
 				{/if}
 			</div>
 		</form>
+		<!-- <div class="select-none">
+			<p class="mt-1 text-center font-medium leading-6 text-blue-500 pt-10">Are you on campus?</p>
+			<p class="mt-1 text-center text-sm leading-6 text-blue-300">
+				Lat: {lat}, Long: {long}
+			</p>
+			<p class="mt-1 text-center text-sm leading-6 text-blue-300">
+				{isOnCampus}
+			</p>
+		</div> -->
 	</div>
 </main>
