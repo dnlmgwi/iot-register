@@ -50,9 +50,9 @@ class CircularGeofenceRegion {
 
 const DiplomaClass = new CircularGeofenceRegion({
 	name: 'NACIT Resource Room',
-	latitude: -13.9739966,
-	longitude: 33.7707999,
-	radius: 4 // meters
+	latitude: -13.9739953,
+	longitude: 33.7709366,
+	radius: 10 // meters
 });
 
 export { DiplomaClass };
