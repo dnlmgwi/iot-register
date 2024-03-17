@@ -51,6 +51,16 @@ export class UserProfileRepository {
 		return data;
 	}
 
+	async getPublicUrl(path: string): Promise<string> {
+		const { data } = await this.supabase.storage.from('uploads').getPublicUrl(path);
+
+		if (!data) {
+			throw new Error('Fetching failed without a specific error.');
+		}
+
+		return data.publicUrl;
+	}
+
 	async GetTotalAttendanceCount(student_id: string) {
 		const { count, error } = await this.supabase
 			.from('register')
