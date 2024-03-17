@@ -1,11 +1,8 @@
 <!-- src/routes/account/+page.svelte -->
 <script lang="ts">
-	import Avatar from '$lib/components/Avatar.svelte';
 	import profileSchema from '$lib/schemas/profileSchema';
 	import toast from 'svelte-french-toast';
 	import { superForm } from 'sveltekit-superforms/client';
-
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let data;
 
@@ -85,19 +82,25 @@
 
 						<div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 							<div class="sm:col-span-3">
-								<div class="flex flex-col items-center justify-center">
-									<p class="text-base font-semibold leading-7 text-blue-600">{data.stats.attendanceCount}</p>
+								<div
+									class="flex flex-col items-center justify-center border-2 border-blue-600 rounded-md p-3"
+								>
+									<p class="text-3xl font-semibold leading-7 text-blue-600">
+										{data.stats.attendanceCount}
+									</p>
 									<p class="text-base leading-7 text-blue-200">Total Attendance</p>
 								</div>
 							</div>
-							<!-- <div class="sm:col-span-3">
-								<div class="flex flex-col items-center justify-center">
-									<p class="text-base font-semibold leading-7 text-blue-600">{data.stats.attendanceAndGroupByMonth}</p>
-									<p class="text-base leading-7 text-blue-200">Total Attendance</p>
+							<div class="sm:col-span-3">
+								<div
+									class="flex flex-col items-center justify-center border-2 border-blue-600 rounded-md p-3"
+								>
+									<p class="text-3xl font-semibold leading-7 text-blue-600">
+										{data.stats.attendanceAvgEntryTime}
+									</p>
+									<p class="text-base leading-7 text-blue-200">Avg Entry Time</p>
 								</div>
-							</div> -->
-
-							
+							</div>
 
 							<div class="sm:col-span-3 select-none">
 								<!-- Item 3 -->
