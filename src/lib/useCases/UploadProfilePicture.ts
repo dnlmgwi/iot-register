@@ -13,7 +13,7 @@ export class UploadProfilePictureUseCase {
 			console.error('Upload Profile Picture Error:', error);
 
 			// Re-throw the error to be handled by the caller
-			throw new Error('Failed to upload profile picture.');
+			throw new Error(error);
 		}
 	}
 }
