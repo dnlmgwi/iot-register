@@ -49,6 +49,12 @@
 
 	$: ({ session, supabase } = data);
 
+	$: {
+		if (data.profile) {
+			$form = data.profile;
+		}
+	}
+
 	const { form, errors, constraints, enhance, capture, restore } = superForm(data.form, {
 		SPA: true,
 		validators: registerSchema,

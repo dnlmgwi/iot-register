@@ -85,12 +85,19 @@
 
 						<div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 							<div class="sm:col-span-3">
-								<!-- Item 1 -->
+								<div class="flex flex-col items-center justify-center">
+									<p class="text-base font-semibold leading-7 text-blue-600">{data.stats.attendanceCount}</p>
+									<p class="text-base leading-7 text-blue-200">Total Attendance</p>
+								</div>
 							</div>
+							<!-- <div class="sm:col-span-3">
+								<div class="flex flex-col items-center justify-center">
+									<p class="text-base font-semibold leading-7 text-blue-600">{data.stats.attendanceAndGroupByMonth}</p>
+									<p class="text-base leading-7 text-blue-200">Total Attendance</p>
+								</div>
+							</div> -->
 
-							<div class="sm:col-span-3">
-								<!-- Item 2 -->
-							</div>
+							
 
 							<div class="sm:col-span-3 select-none">
 								<!-- Item 3 -->

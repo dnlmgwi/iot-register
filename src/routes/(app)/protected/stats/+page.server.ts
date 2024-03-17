@@ -2,10 +2,12 @@ import { updateProfileData } from '$lib/ValueObjects/Profile.js';
 import profileSchema from '$lib/schemas/profileSchema.js';
 import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
 import { GetUserProfileUseCase } from '$lib/useCases/GetUserProfile.js';
-import { UpdateUserProfileUseCase as UpdateUserProfileUseCase } from '$lib/useCases/UpdateUserProfile.js';
+import { UpdateUserProfileUseCase as UpdateUserProfileUseCase } from '$lib/useCases/UpdateUserProfile';
 
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
+import { GetTotalAttendanceAndGroupByDay } from '$lib/useCases/GetTotalAttendanceAndGroupByMonth';
+import { GetTotalAttendanceCount } from '$lib/useCases/GetTotalAttendanceCount';
 
 export const load = async ({ locals: { supabase, getSession }, request }) => {
 	const form = await superValidate(request, profileSchema);
@@ -20,7 +22,28 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 	const getUserProfile = new GetUserProfileUseCase(userProfileRepository);
 	const profile = await getUserProfile.execute(session.user.id);
 
-	return { session, profile, form };
+	if (!profile) {
+		throw redirect(303, '/');
+	}
+
+	//Get Stats
+	// const getTotalAttendanceAndGroupByDay = new GetTotalAttendanceAndGroupByDay(
+	// 	userProfileRepository
+	// );
+	const getTotalAttendanceCount = new GetTotalAttendanceCount(userProfileRepository);
+
+	const attendanceCount = await getTotalAttendanceCount.execute(profile.student_id);
+	// const attendanceAndGroupByDay = await getTotalAttendanceAndGroupByDay.execute(profile.student_id);
+
+	return {
+		session,
+		profile,
+		form,
+		stats: {
+			attendanceCount: attendanceCount
+			// attendanceAndGroupByMonth: attendanceAndGroupByDay
+		}
+	};
 };
 
 export const actions = {
