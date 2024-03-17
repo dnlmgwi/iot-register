@@ -23,7 +23,7 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 	const profile = await getUserProfile.execute(session.user.id);
 
 	if (!profile) {
-		throw redirect(303, '/');
+		throw Error('Please Complete Your Profile');
 	}
 
 	//Get Stats
