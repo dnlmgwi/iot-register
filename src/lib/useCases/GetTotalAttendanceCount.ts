@@ -1,6 +1,6 @@
 import type { UserProfileRepository } from '$lib/repositories/UserProfileRepository';
 
-export class GetTotalAttendanceCount {
+export class GetTotalAttendanceCountUseCase {
 	constructor(private userProfileRepository: UserProfileRepository) {}
 
 	async execute(userId: string) {
