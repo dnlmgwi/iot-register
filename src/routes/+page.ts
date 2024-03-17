@@ -1,14 +1,10 @@
 export const prerender = true;
 
-import { superValidate } from "sveltekit-superforms/client";
-import { z } from "zod";
+import { registerSchema } from '$lib/schemas/registerSchema';
+import { superValidate } from 'sveltekit-superforms/client';
 
-export const _userSchema = z.object({
-  studentNumber: z.string().min(5),
-});
+export const load = async () => {
+	const form = await superValidate(registerSchema);
 
-export const load = async ({  }) => {
-  const form = await superValidate(_userSchema);
-
-  return { form };
+	return { form };
 };

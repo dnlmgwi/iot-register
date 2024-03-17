@@ -1,5 +1,5 @@
-let SERVICE_UUID = import.meta.env.VITE_SERVICE_UUID;
-let CHARACTERISTIC_UUID = import.meta.env.VITE_CHARACTERISTIC_UUID
+import { PUBLIC_SERVICE_UUID, PUBLIC_CHARACTERISTIC_UUID } from '$env/static/public';
+
 let device;
 let server;
 let characteristic;
@@ -10,24 +10,21 @@ let characteristic;
  * @throws Will throw an error if unable to send data.
  */
 export async function sendData(studentNumber) {
-  let server;
-  try {
-    server = await device.gatt.connect();
-    const service = await server.getPrimaryService(SERVICE_UUID);
-    const characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+	let server;
+	try {
+		server = await device.gatt.connect();
+		const service = await server.getPrimaryService(PUBLIC_SERVICE_UUID);
+		const characteristic = await service.getCharacteristic(PUBLIC_CHARACTERISTIC_UUID);
 
-    // Extract the studentNumber value from the object and encode it
-     // Assuming data has a studentNumber property
-    const dataArray = new TextEncoder().encode(studentNumber);
-    await characteristic.writeValue(dataArray);
-
-  } catch (error) {
-    throw error;
-  } finally {
-    if (server) {
-      await server.disconnect(device);
-    }
-  }
+		// Extract the studentNumber value from the object and encode it
+		// Assuming data has a studentNumber property
+		const dataArray = new TextEncoder().encode(studentNumber);
+		await characteristic.writeValue(dataArray);
+	} finally {
+		if (server) {
+			await server.disconnect(device);
+		}
+	}
 }
 
 /**
@@ -36,28 +33,27 @@ export async function sendData(studentNumber) {
  * @throws Will throw an error if unable to connect to the device.
  */
 export async function connect() {
-  try {
-    device = await navigator.bluetooth.requestDevice({
-      filters: [{ name: "NX10" }],
-      optionalServices: [SERVICE_UUID],
-    });
 
-    server = await device.gatt.connect();
+	device = await navigator.bluetooth.requestDevice({
+		filters: [{ name: 'NX10' }],
+		optionalServices: [PUBLIC_SERVICE_UUID]
+	});
 
-    characteristic = await server
-      .getPrimaryService(SERVICE_UUID)
-      .then((service) => service.getCharacteristic(CHARACTERISTIC_UUID));
-    return device;
-  } catch (error) {
-    throw error;
-  }
+	server = await device.gatt.connect();
+
+	characteristic = await server
+		.getPrimaryService(PUBLIC_SERVICE_UUID)
+		.then((service) => service.getCharacteristic(PUBLIC_CHARACTERISTIC_UUID));
+	return device;
+
 }
+
 /**
  * Disconnects from a BLE device.
  * @param {BluetoothDevice} device - The device to disconnect.
  */
 export function disconnect(device) {
-  if (device) {
-    device.gatt.disconnect();
-  }
+	if (device) {
+		device.gatt.disconnect();
+	}
 }
