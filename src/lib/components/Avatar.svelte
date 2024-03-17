@@ -5,13 +5,13 @@
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import { DownloadImageUseCase } from '$lib/useCases/GetUserProfilePicture';
 	import toast from 'svelte-french-toast';
+	import { GetPublicUrlUseCase } from '$lib/useCases/GetPublicUrl';
 
 	export let size = 10;
 	export let url: string;
 	export let supabase: SupabaseClient;
 	export let userId: string;
 
-	$: avatarUrl = '';
 	let uploading = false;
 	let files: FileList;
 
@@ -19,24 +19,27 @@
 
 	const userProfileRepository = new UserProfileRepository(supabase);
 	const uploadProfilePicture = new UploadProfilePictureUseCase(userProfileRepository);
-	const downloadProfilePicture = new DownloadImageUseCase(userProfileRepository);
+	// const downloadProfilePicture = new DownloadImageUseCase(userProfileRepository);
+	const getPublicUrl = new GetPublicUrlUseCase(userProfileRepository);
 
-	const downloadImage = async (path: string) => {
-		try {
-			const data = await downloadProfilePicture.execute(path);
+	// const downloadImage = async (path: string) => {
+	// 	try {
+	// 		const publicUrl = await getPublicUrl.execute(path);
 
-			if (!data) {
-				throw Error('File Not Found');
-			}
+	// 		if (!publicUrl) {
+	// 			throw Error('File Not Found');
+	// 		}
 
-			avatarUrl = URL.createObjectURL(data);
-		} catch (error) {
-			if (error instanceof Error) {
-				console.log('Error downloading image: ', error.message);
-				toast.error(error.message);
-			}
-		}
-	};
+	// 		url = publicUrl;
+
+	// 		avatarUrl = publicUrl;
+	// 	} catch (error) {
+	// 		if (error instanceof Error) {
+	// 			console.log('Error downloading image: ', error.message);
+	// 			toast.error(error.message);
+	// 		}
+	// 	}
+	// };
 
 	function triggerFileInput() {
 		const fileInput = document.getElementById('single');
@@ -62,22 +65,18 @@
 			}
 
 			const file = files[0];
-			// Assuming uploadProfilePicture.execute now only returns a string or throws an error
 			const data = await uploadProfilePicture.execute(userId, file);
+			const publicUrl = await getPublicUrl.execute(data);
 
-			// Since the function either throws or returns a string, data is guaranteed to be a string here
-			url = data;
+			url = publicUrl;
 
 			setTimeout(() => {
-				// Dispatch the custom event with the updated url
-				dispatch('upload', { url });
+				dispatch('upload', { publicUrl });
 			}, 100);
 
 			toast('Profile Picture Uploaded', { icon: '✅' });
 		} catch (error) {
 			if (error instanceof Error) {
-				// Handle the error, possibly using a notification mechanism
-				console.error(error.message); // Replace with your error handling logic
 				toast.error(error.message);
 			}
 		} finally {
@@ -85,7 +84,7 @@
 		}
 	};
 
-	$: if (url) downloadImage(url);
+	// $: if (url) downloadImage(url);
 </script>
 
 <div>
@@ -94,17 +93,17 @@
 	<!-- File input for uploading images -->
 	<div class="w-[10em]">
 		<div>
-			{#if avatarUrl}
+			{#if url}
 				<div
 					role="button"
 					tabindex="0"
 					class="w-[{size}em] h-[{size}em] bg-gray-200 flex justify-center items-center cursor-pointer rounded-full"
-					style="background-image: url({avatarUrl}); background-size: cover; height: {size}em; width: {size}em;"
+					style="background-image: url({url}); background-size: cover; height: {size}em; width: {size}em;"
 					on:click={triggerFileInput}
 					on:keypress={handleKeyPress}
 					aria-controls=""
 				>
-					{#if !avatarUrl}
+					{#if !url}
 						<span class="text-gray-500">{uploading ? 'Uploading ...' : 'Upload Image'}</span>
 					{/if}
 				</div>
