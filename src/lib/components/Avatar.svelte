@@ -110,6 +110,11 @@
 				</div>
 			{:else}
 				<div
+					role="button"
+					tabindex="0"
+					on:click={triggerFileInput}
+					on:keypress={handleKeyPress}
+					aria-controls=""
 					class="w-[{size}em] h-[{size}em] bg-gray-200 flex justify-center items-center cursor-pointer rounded-full"
 					style="height: {size}em; width: {size}em;"
 				>

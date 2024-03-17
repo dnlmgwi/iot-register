@@ -8,7 +8,9 @@
 	import { checkedInStore, triggerReset } from '$lib/stores/checkedInStores';
 	import { registerSchema } from '$lib/schemas/registerSchema';
 	import { DiplomaClass } from '$lib/utils/geofencing.js';
-	import { SignOutUseCase } from '$lib/useCases/SignOut';
+	import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
+	import { GetUserProfileUseCase } from '$lib/useCases/GetUserProfile.js';
+	import { UpdateUserProfileUseCase as UpdateUserProfileUseCase } from '$lib/useCases/UpdateUserProfile.js';
 
 	export let data: PageData;
 
@@ -50,11 +52,26 @@
 
 	$: ({ session, supabase } = data);
 
-	$: {
-		if (data.profile) {
-			$form = data.profile;
+	const userProfileRepository = new UserProfileRepository(supabase);
+	const getUserProfile = new GetUserProfileUseCase(userProfileRepository);
+
+	const fetchUserProfile = async () => {
+		if (!session) {
+			throw new Error('Session not found');
 		}
-	}
+
+		try {
+			const profile = await getUserProfile.execute(session.user.id);
+
+			if (profile) {
+				$form.student_id = profile.student_id; // Assuming 'data' is defined in your wider scope.
+			} else {
+				console.log('No profile found for the user:', session.user.id);
+			}
+		} catch (error) {
+			toast.error('Please Update Profile');
+		}
+	};
 
 	const { form, errors, constraints, enhance, capture, restore } = superForm(data.form, {
 		SPA: true,
