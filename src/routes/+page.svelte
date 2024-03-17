@@ -44,6 +44,7 @@
 	onMount(() => {
 		// Watch Live Location
 		// navigator.geolocation.watchPosition(success, error, options);
+		fetchUserProfile();
 	});
 
 	let device: unknown;
@@ -57,7 +58,7 @@
 
 	const fetchUserProfile = async () => {
 		if (!session) {
-			throw new Error('Session not found');
+			toast.error('Session not found');
 		}
 
 		try {
