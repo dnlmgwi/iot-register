@@ -59,11 +59,7 @@ export const actions = {
 			return fail(400, { form });
 		}
 
-		console.log(form.data);
-
 		const profileData = updateProfileData(session, form.data);
-
-		console.log(profileData);
 
 		const userProfileRepository = new UserProfileRepository(supabase);
 		const updateUserProfile = new UpdateUserProfileUseCase(userProfileRepository);
