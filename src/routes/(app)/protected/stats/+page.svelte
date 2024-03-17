@@ -1,4 +1,3 @@
-<!-- src/routes/account/+page.svelte -->
 <script lang="ts">
 	import BarGraph from '$lib/components/BarGraph.svelte';
 	import profileSchema from '$lib/schemas/profileSchema';
@@ -22,8 +21,6 @@
 		stickyNavbar: 'true',
 		onUpdated({ form }) {
 			if (form.valid) {
-				// Successful post! Do some more client-side stuff,
-				// like showing a toast notification.
 				toast('Profile Updated', { icon: '✅' });
 				loading = false;
 				disableName = true;
@@ -60,7 +57,7 @@
 	}
 
 	function handleUpload(event: CustomEvent) {
-		$form.avatar_url = event.detail.url; // Update the parent's variable with the new URL
+		$form.avatar_url = event.detail.url;
 	}
 </script>
 

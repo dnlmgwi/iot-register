@@ -9,9 +9,6 @@ export class GetPublicUrlUseCase {
 
 			return url;
 		} catch (error) {
-			// Optionally, log the error or transform it into a more specific error type here
-			console.error('Upload Profile Picture Error:', error);
-
 			// Re-throw the error to be handled by the caller
 			throw new Error('Failed to upload profile picture.');
 		}

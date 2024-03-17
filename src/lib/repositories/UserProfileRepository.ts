@@ -1,3 +1,4 @@
+import type { MonthlyAttendance, RegisterRow } from '$lib/ValueObjects/MonthlyAttendance';
 import type { ProfileValueObject } from '$lib/ValueObjects/Profile';
 import type { Profile } from '$lib/entities/Profile';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -5,14 +6,22 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 export class UserProfileRepository {
 	constructor(private supabase: SupabaseClient) {}
 
-	async getUserProfile(userId: string): Promise<Profile | null> {
-		const { data } = await this.supabase
+	async getUserProfile(userId: string): Promise<Profile> {
+		const { data, error } = await this.supabase
 			.from('profile')
 			.select('student_id, student_name, avatar_url')
 			.eq('id', userId)
 			.single();
 
-		return data ? data : null;
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		if (!data) {
+			throw new Error('Fetch failed without a specific error.');
+		}
+
+		return data;
 	}
 
 	async updateUserProfile(profile: ProfileValueObject): Promise<Error | null> {
@@ -62,17 +71,13 @@ export class UserProfileRepository {
 	}
 
 	async getTotalAttendanceCount(student_id: string) {
-		const { count, error } = await this.supabase
+		const { error, count } = await this.supabase
 			.from('register')
 			.select('*', { count: 'exact' })
 			.eq('student_id', student_id);
 
 		if (error) {
 			throw new Error(error.message);
-		}
-
-		if (!count) {
-			throw new Error('Failed without a specific error.');
 		}
 
 		return count;
@@ -85,7 +90,6 @@ export class UserProfileRepository {
 			.eq('student_id', student_id);
 
 		if (error) {
-			console.error('Error fetching data:', error.message);
 			return;
 		}
 
@@ -167,31 +171,35 @@ export class UserProfileRepository {
 	// 	return missedDays;
 	// }
 
-	async getTotalAttendancePerMonth(student_id: string) {
-		const { data } = await this.supabase
+	async getTotalAttendancePerMonth(student_id: string): Promise<MonthlyAttendance[]> {
+		// Assuming 'this.supabase' is properly typed elsewhere in your code.
+		const { data, error } = await this.supabase
 			.from('register')
 			.select('created_at')
 			.eq('student_id', student_id);
+
+		if (error) {
+			throw new Error(error.message);
+		}
 
 		if (!data) {
 			throw new Error('Fetching failed without a specific error.');
 		}
 
-		const monthAttendance = data.reduce((acc, row) => {
+		const monthAttendance = data.reduce((acc: Record<string, number>, row: RegisterRow) => {
 			const monthYear = new Date(row.created_at).toLocaleString('default', {
 				month: 'short',
 				year: 'numeric'
 			});
-			if (!acc[monthYear]) {
-				acc[monthYear] = 0;
-			}
-			acc[monthYear]++;
+			acc[monthYear] = (acc[monthYear] || 0) + 1;
 			return acc;
 		}, {});
 
-		return Object.entries(monthAttendance).map(([month, count]) => ({
-			Month: month,
-			AttendanceCount: count
-		}));
+		return Object.entries(monthAttendance).map(
+			([Month, AttendanceCount]): MonthlyAttendance => ({
+				Month,
+				AttendanceCount
+			})
+		);
 	}
 }

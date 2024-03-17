@@ -24,7 +24,7 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 
 	const profile = await getUserProfile.execute(session.user.id);
 
-	if (!profile) {
+	if (profile.student_id == null) {
 		throw Error('Please Complete Your Profile');
 	}
 
@@ -38,8 +38,6 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 	const attendanceCount = await getTotalAttendanceCount.execute(profile.student_id);
 	const attendanceAvgEntryTime = await getAverageEntryTime.execute(profile.student_id);
 	const getTotalCountByMonth = await getTotalAttendanceCountByMonth.execute(profile.student_id);
-
-	console.log(getTotalCountByMonth);
 
 	return {
 		session,
