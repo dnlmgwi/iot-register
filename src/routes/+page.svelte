@@ -58,7 +58,7 @@
 
 	const fetchUserProfile = async () => {
 		if (!session) {
-			toast.error('Session not found');
+			throw Error();
 		}
 
 		try {
@@ -66,12 +66,10 @@
 
 			if (profile) {
 				$form.student_id = profile.student_id; // Assuming 'data' is defined in your wider scope.
-			} else {
-				console.log('No profile found for the user:', session.user.id);
 			}
-		} catch (error) {
+
 			toast.error('Please Update Profile');
-		}
+		} catch (error) {}
 	};
 
 	const { form, errors, constraints, enhance, capture, restore } = superForm(data.form, {
