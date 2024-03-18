@@ -90,23 +90,27 @@ export class UserProfileRepository {
 			.eq('student_id', student_id);
 
 		if (error) {
-			return;
+			console.error('Error fetching data:', error);
+			return null;
 		}
 
-		const timesInMinutes = data.map(({ created_at }) => {
+		if (data.length === 0) {
+			return 'No data available';
+		}
+
+		const timezoneOffsetHours = 2; // For +02:00 timezone
+		const totalMinutes = data.reduce((acc, { created_at }) => {
 			const time = new Date(created_at);
-			return time.getHours() * 60 + time.getMinutes();
-		});
+			// Adjust for timezone difference from UTC
+			const adjustedTime = new Date(time.getTime() + timezoneOffsetHours * 60 * 60 * 1000);
+			return acc + (adjustedTime.getUTCHours() * 60 + adjustedTime.getUTCMinutes());
+		}, 0);
 
-		const averageTimeInMinutes =
-			timesInMinutes.reduce((acc, curr) => acc + curr, 0) / timesInMinutes.length;
+		const averageMinutes = totalMinutes / data.length;
+		const averageHours = Math.floor(averageMinutes / 60);
+		const averageMinute = Math.round(averageMinutes % 60);
 
-		const averageHours = Math.floor(averageTimeInMinutes / 60);
-		const averageMinutes = Math.floor(averageTimeInMinutes % 60);
-
-		const averageTime = `${averageHours.toString().padStart(2, '0')}:${averageMinutes.toString().padStart(2, '0')}`;
-
-		return averageTime;
+		return `${averageHours.toString().padStart(2, '0')}:${averageMinute.toString().padStart(2, '0')}`;
 	}
 
 	// async GetAttendanceAndGroupByDate(student_id: string): Promise<AttendanceByDateArray> {
