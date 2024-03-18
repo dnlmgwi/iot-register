@@ -105,7 +105,7 @@
 									class="flex flex-col items-center justify-center border-2 border-blue-600 rounded-md p-3"
 								>
 									<BarGraph data={data.stats.attendanceCountByMonth}></BarGraph>
-									<p class="text-base leading-7 text-blue-600">Total Attendance</p>
+									<p class="text-base leading-7 text-blue-600">Total Attendance By Month</p>
 								</div>
 							</div>
 						</div>
