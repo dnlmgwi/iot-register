@@ -2,7 +2,6 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { derived, writable } from 'svelte/store';
-	import { PUBLIC_SITEKEY } from '$env/static/public';
 	import '../app.css';
 	export let data;
 

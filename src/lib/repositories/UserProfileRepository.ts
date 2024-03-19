@@ -83,7 +83,7 @@ export class UserProfileRepository {
 		return count;
 	}
 
-	async getAverageEntryTime(student_id: string) {
+	async getAverageEntryTime(student_id: string): Promise<string> {
 		const { data, error } = await this.supabase
 			.from('register')
 			.select('created_at')
@@ -91,7 +91,7 @@ export class UserProfileRepository {
 
 		if (error) {
 			console.error('Error fetching data:', error);
-			return null;
+			throw Error(error.message);
 		}
 
 		if (data.length === 0) {
