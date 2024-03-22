@@ -24,6 +24,24 @@ export class UserProfileRepository {
 		return data;
 	}
 
+	async getUserProfileByStudentID(student_id: string): Promise<Profile> {
+		const { data, error } = await this.supabase
+			.from('profile')
+			.select('student_id, student_name, avatar_url')
+			.eq('student_id', student_id)
+			.single();
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		if (!data) {
+			throw new Error('Fetch failed without a specific error.');
+		}
+
+		return data;
+	}
+
 	async updateUserProfile(profile: ProfileValueObject): Promise<Error | null> {
 		const { error } = await this.supabase.from('profile').upsert(profile);
 
