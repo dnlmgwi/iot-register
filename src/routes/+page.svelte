@@ -66,10 +66,10 @@
 		timeout: 7000
 	};
 
-	onMount(() => {
+	onMount(async () => {
 		// Watch Live Location
 		// navigator.geolocation.watchPosition(success, error, options);
-		fetchUserProfile();
+		await fetchUserProfile();
 	});
 
 	let device: unknown;
@@ -77,14 +77,8 @@
 	$: isConnected = false;
 
 	const fetchUserProfile = async () => {
-		try {
-			if (data.profile) {
-				$formData.student_id = data.profile.student_id; // Assuming 'data' is defined in your wider scope.
-			}
-		} catch (error) {
-			if (error instanceof Error) {
-				toast.error(error.message);
-			}
+		if (data.profile) {
+			$formData.student_id = data.profile.student_id; // Assuming 'data' is defined in your wider scope.
 		}
 	};
 

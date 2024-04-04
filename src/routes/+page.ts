@@ -16,7 +16,11 @@ export const load = async ({ parent }) => {
 
 	const userProfileRepository = new UserProfileRepository(supabase);
 	const getUserProfile = new GetUserProfileUseCase(userProfileRepository);
-	const profile = await getUserProfile.execute(session.user.id);
 
-	return { form, profile };
+	try {
+		const profile = await getUserProfile.execute(session.user.id);
+		return { form, profile };
+	} catch {
+		return { form };
+	}
 };
