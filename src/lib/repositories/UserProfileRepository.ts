@@ -131,6 +131,32 @@ export class UserProfileRepository {
 		return `${averageHours.toString().padStart(2, '0')}:${averageMinute.toString().padStart(2, '0')}`;
 	}
 
+	async getAttendanceCount() {
+		const { data, error } = await this.supabase.rpc('get_student_attendance_count');
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data;
+	}
+
+	async getAttendanceCountByModule(module_id: string) {
+		const { data, error } = await this.supabase.rpc('get_student_attendance_count_by_module', {
+			module_id: module_id
+		});
+
+		if (data.length === 0) {
+			throw new Error('No data found');
+		}
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data;
+	}
+
 	// async GetAttendanceAndGroupByDate(student_id: string): Promise<AttendanceByDateArray> {
 	// 	const { data, error } = await this.supabase
 	// 		.from('register')

@@ -1,5 +1,5 @@
 import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
-import { GetUserProfileByIDUseCase } from '$lib/useCases/GetUserProfileByID.js';
+import { GetAttendanceCountByModuleUseCase } from '$lib/useCases/GetAttendanceCountByModule.js';
 import { rateLimiter } from '$lib/utils/rateLimiter.js';
 import { json } from '@sveltejs/kit';
 
@@ -11,18 +11,21 @@ export async function POST({ request, locals }) {
 
 	const userProfileRepository = new UserProfileRepository(locals.supabase);
 
-	const { student_id } = await request.json();
+	const { module_id } = await request.json();
 
-	if (!student_id) {
+	if (!module_id) {
+		
 		return json({ message: 'Please read the docs' }, { status: 400 });
 	}
 
 	try {
-		const getUserProfile = new GetUserProfileByIDUseCase(userProfileRepository);
-		const profile = await getUserProfile.execute(student_id);
+		//Get Stats
+		const getAttendanceCount = new GetAttendanceCountByModuleUseCase(userProfileRepository);
 
-		return json({ profile });
+		const data = await getAttendanceCount.execute(module_id);
+
+		return json({ data });
 	} catch (error) {
-		return json({ message: 'Student Profile Not Found' }, { status: 404 });
+		return json({ message: 'Data Not Found' }, { status: 404 });
 	}
 }
