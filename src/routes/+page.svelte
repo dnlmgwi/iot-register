@@ -45,11 +45,7 @@
 	onMount(() => {
 		// Watch Live Location
 		// navigator.geolocation.watchPosition(success, error, options);
-		try {
-			fetchUserProfile();
-		} catch (error) {
-			throw redirect(303, '/protected/profile');
-		}
+		fetchUserProfile();
 	});
 
 	let device: unknown;
@@ -63,7 +59,7 @@
 
 	const fetchUserProfile = async () => {
 		try {
-			if (session) {
+			if (session ) {
 				const profile = await getUserProfile.execute(session.user.id);
 
 				if (profile) {
