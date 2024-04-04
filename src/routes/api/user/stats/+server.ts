@@ -20,9 +20,9 @@ export async function POST({ request, locals }) {
 		//Get Stats
 		const getTotalAttendanceCount = new GetTotalAttendanceCountUseCase(userProfileRepository);
 
-		const attendanceCount = await getTotalAttendanceCount.execute(student_id);
+		const count = await getTotalAttendanceCount.execute(student_id);
 
-		return json({ attendanceCount });
+		return json({ data: count });
 	} catch (error) {
 		return json({ message: 'Student ID Not Found' }, { status: 404 });
 	}
