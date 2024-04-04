@@ -59,7 +59,7 @@
 
 	const fetchUserProfile = async () => {
 		try {
-			if (session !== null) {
+			if (session != null) {
 				const profile = await getUserProfile.execute(session.user.id);
 
 				if (profile) {
