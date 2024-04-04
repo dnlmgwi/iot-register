@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex flex-col rounded-lg p-4 max-w-sm">
-	<div class="rounded-lg bg-card text-card-foreground shadow-sm w-full max-w-3xl">
+	<div class="rounded-lg bg-card text-card-foreground shadow-sm w-full max-w-3xl select-none">
 		<div class="flex flex-col space-y-1.5 p-6 pb-0 mb-3">
 			<h3
 				class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight text-blue-600"
@@ -44,17 +44,22 @@
 											<p class="text-blue-600">{index + 1}</p>
 										</td>
 										<td class="p-4 align-middle">
-											<div class="flex justify-self-center items-center space-x-2">
-												<TrophyIcon class="text-blue-600" />
+											<div class="flex items-center space-x-2">
 												<img
 													src={avatar_url}
 													alt={student_name}
-													class="w-20 h-20 rounded-full object-cover"
+													class="w-12 h-12 rounded-full object-cover"
 												/>
-												<span class="text-blue-600">{student_name}</span>
+												<p class="text-blue-600">{student_name}</p>
+											</div>
+										</td>
+										<td class="p-4 align-middle text-right text-blue-600">
+											<div class="flex justify-self-center items-center space-x-2">
+												<TrophyIcon class="text-blue-600" />
+
+												<p class="text-blue-600">{count}</p>
 											</div></td
 										>
-										<td class="p-4 align-middle text-right text-blue-600"> {count}</td>
 									</tr>
 								{:else}
 									<tr
@@ -68,12 +73,14 @@
 													src={avatar_url}
 													alt={student_name}
 													class="w-12 h-12 rounded-full object-cover"
-												/><span class="text-blue-600">{student_name}</span>
+												/>
+												<p class="text-blue-600">{student_name}</p>
 											</div></td
 										><td
 											class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 text-right text-blue-600"
-											>{count}</td
-										></tr
+										>
+											<p class="text-blue-600">{count}</p>
+										</td></tr
 									>
 								{/if}
 							{/each}
