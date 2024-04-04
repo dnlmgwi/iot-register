@@ -1,5 +1,6 @@
 import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
 import { GetAttendanceCountByModuleUseCase } from '$lib/useCases/GetAttendanceCountByModule.js';
+import { GetAttendanceCountByModuleWithRatingUseCase } from '$lib/useCases/GetAttendanceCountByModuleWithRatings.js';
 import { rateLimiter } from '$lib/utils/rateLimiter.js';
 import { json } from '@sveltejs/kit';
 
@@ -19,9 +20,11 @@ export async function POST({ request, locals }) {
 
 	try {
 		//Get Stats
-		const getAttendanceCount = new GetAttendanceCountByModuleUseCase(userProfileRepository);
+		const getAttendanceCountWithRating = new GetAttendanceCountByModuleWithRatingUseCase(
+			userProfileRepository
+		);
 
-		const data = await getAttendanceCount.execute(module_id);
+		const data = await getAttendanceCountWithRating.execute(module_id);
 
 		return json({ data });
 	} catch (error) {

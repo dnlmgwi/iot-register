@@ -1,6 +1,7 @@
 import type { MonthlyAttendance, RegisterRow } from '$lib/ValueObjects/MonthlyAttendance';
 import type { ProfileValueObject } from '$lib/ValueObjects/Profile';
 import type { Profile } from '$lib/entities/Profile';
+import { addAttendanceRating } from '$lib/utils/attendanceRating';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 export class UserProfileRepository {
@@ -157,6 +158,24 @@ export class UserProfileRepository {
 		return data;
 	}
 
+	async getAttendanceCountByModuleWithRating(module_id: string) {
+		const { data, error } = await this.supabase.rpc('get_student_attendance_count_by_module', {
+			module_id: module_id
+		});
+
+		if (data.length === 0) {
+			throw new Error('No data found');
+		}
+
+		// Calculate ratings
+		const attendanceWithRatings = addAttendanceRating(data);
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return attendanceWithRatings;
+	}
 	// async GetAttendanceAndGroupByDate(student_id: string): Promise<AttendanceByDateArray> {
 	// 	const { data, error } = await this.supabase
 	// 		.from('register')
