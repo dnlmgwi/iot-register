@@ -24,6 +24,24 @@ export class UserProfileRepository {
 		return data;
 	}
 
+	async getUserProfileByStudentID(student_id: string): Promise<Profile> {
+		const { data, error } = await this.supabase
+			.from('profile')
+			.select('student_id, student_name, avatar_url')
+			.eq('student_id', student_id)
+			.single();
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		if (!data) {
+			throw new Error('Fetch failed without a specific error.');
+		}
+
+		return data;
+	}
+
 	async updateUserProfile(profile: ProfileValueObject): Promise<Error | null> {
 		const { error } = await this.supabase.from('profile').upsert(profile);
 
@@ -111,6 +129,32 @@ export class UserProfileRepository {
 		const averageMinute = Math.round(averageMinutes % 60);
 
 		return `${averageHours.toString().padStart(2, '0')}:${averageMinute.toString().padStart(2, '0')}`;
+	}
+
+	async getAttendanceCount() {
+		const { data, error } = await this.supabase.rpc('get_student_attendance_count');
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data;
+	}
+
+	async getAttendanceCountByModule(module_id: string) {
+		const { data, error } = await this.supabase.rpc('get_student_attendance_count_by_module', {
+			module_id: module_id
+		});
+
+		if (data.length === 0) {
+			throw new Error('No data found');
+		}
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data;
 	}
 
 	// async GetAttendanceAndGroupByDate(student_id: string): Promise<AttendanceByDateArray> {
