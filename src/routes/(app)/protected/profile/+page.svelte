@@ -151,15 +151,13 @@
 							value={loading ? 'Loading...' : 'Update'}
 							disabled={loading}
 						/>
-						<p>
-							<a href="/" class="text-base font-semibold leading-7 text-blue-600"
-								><button
-									class="rounded-full border-2 border-blue-600 px-6 py-4 text-sm font-semibold text-blue-600 hover:bg-blue-600 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600"
-								>
-									Back</button
-								></a
+						<a href="/" class="text-base font-semibold leading-7 text-blue-600"
+							><button
+								class="rounded-full border-2 border-blue-600 px-6 py-4 text-sm font-semibold text-blue-600 hover:bg-blue-600 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600"
 							>
-						</p>
+								Back</button
+							></a
+						>
 					</div>
 				</form>
 			</div>
