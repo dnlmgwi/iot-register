@@ -13,7 +13,7 @@
 			>
 				Leaderboard
 			</h3>
-			<p class="text-sm text-muted-foreground text-blue-500">Overall Attendance</p>
+			<p class="text-sm text-muted-foreground text-blue-500">Top 15 Overall Attendance</p>
 		</div>
 		<div class="p-0">
 			<div class="overflow-hidden rounded-lg border border-blue-500 dark:border-gray-800">

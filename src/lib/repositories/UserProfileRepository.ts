@@ -143,6 +143,16 @@ export class UserProfileRepository {
 		return data;
 	}
 
+	async getAttendanceCountTop15(): Promise<AttendanceData[]> {
+		const { data, error } = await this.supabase.rpc('get_student_attendance_count_top_15');
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data;
+	}
+
 	async getAttendanceCountByModule(module_id: string) {
 		const { data, error } = await this.supabase.rpc('get_student_attendance_count_by_module', {
 			module_id: module_id
