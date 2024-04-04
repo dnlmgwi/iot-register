@@ -1,6 +1,7 @@
 import type { MonthlyAttendance, RegisterRow } from '$lib/ValueObjects/MonthlyAttendance';
 import type { ProfileValueObject } from '$lib/ValueObjects/Profile';
 import type { Profile } from '$lib/entities/Profile';
+import type { AttendanceData } from '$lib/entities/Student';
 import { addAttendanceRating } from '$lib/utils/attendanceRating';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
