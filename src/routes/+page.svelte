@@ -63,13 +63,12 @@
 
 	const fetchUserProfile = async () => {
 		try {
-			if (!session) {
-				throw new Error('Please Update Profile');
-			}
-			const profile = await getUserProfile.execute(session.user.id);
+			if (session) {
+				const profile = await getUserProfile.execute(session.user.id);
 
-			if (profile) {
-				$form.student_id = profile.student_id; // Assuming 'data' is defined in your wider scope.
+				if (profile) {
+					$form.student_id = profile.student_id; // Assuming 'data' is defined in your wider scope.
+				}
 			}
 		} catch (error) {
 			if (error instanceof Error) {
