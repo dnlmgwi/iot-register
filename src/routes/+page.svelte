@@ -8,12 +8,36 @@
 	import { checkedInStore, triggerReset } from '$lib/stores/checkedInStores';
 	import { registerSchema } from '$lib/schemas/registerSchema';
 	import { DiplomaClass } from '$lib/utils/geofencing.js';
-	import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
-	import { GetUserProfileUseCase } from '$lib/useCases/GetUserProfile.js';
-	import { UpdateUserProfileUseCase as UpdateUserProfileUseCase } from '$lib/useCases/UpdateUserProfile.js';
-	import { redirect } from '@sveltejs/kit';
 
 	export let data: PageData;
+
+	$: ({ session, supabase, form } = data);
+
+	const {
+		form: formData,
+		errors,
+		constraints,
+		enhance,
+		capture,
+		restore
+	} = superForm(data.form, {
+		SPA: true,
+		validators: registerSchema,
+		applyAction: true,
+		taintedMessage: null,
+		scrollToError: 'smooth',
+		autoFocusOnError: 'detect',
+		// On ActionResult error, render the nearest +error.svelte page
+		onError: 'apply',
+		// No message when navigating away from a modified form
+		onUpdate({ form }) {
+			// Form validation
+			if (form.valid) {
+				// TODO: Do something with the validated form.data
+				connectToDevice();
+			}
+		}
+	});
 
 	//Geo Fencing v0
 	$: lat = 0;
@@ -52,19 +76,10 @@
 
 	$: isConnected = false;
 
-	$: ({ session, supabase } = data);
-
-	const userProfileRepository = new UserProfileRepository(supabase);
-	const getUserProfile = new GetUserProfileUseCase(userProfileRepository);
-
 	const fetchUserProfile = async () => {
 		try {
-			if (session != null) {
-				const profile = await getUserProfile.execute(session.user.id);
-
-				if (profile) {
-					$form.student_id = profile.student_id; // Assuming 'data' is defined in your wider scope.
-				}
+			if (data.profile) {
+				$formData.student_id = data.profile.student_id; // Assuming 'data' is defined in your wider scope.
 			}
 		} catch (error) {
 			if (error instanceof Error) {
@@ -72,25 +87,6 @@
 			}
 		}
 	};
-
-	const { form, errors, constraints, enhance, capture, restore } = superForm(data.form, {
-		SPA: true,
-		validators: registerSchema,
-		applyAction: true,
-		taintedMessage: null,
-		scrollToError: 'smooth',
-		autoFocusOnError: 'detect',
-		// On ActionResult error, render the nearest +error.svelte page
-		onError: 'apply',
-		// No message when navigating away from a modified form
-		onUpdate({ form }) {
-			// Form validation
-			if (form.valid) {
-				// TODO: Do something with the validated form.data
-				connectToDevice();
-			}
-		}
-	});
 
 	export const snapshot = { capture, restore };
 
@@ -101,7 +97,7 @@
 				isConnected = true;
 				//Better Waiting Experience
 				toast.promise(
-					sendData($form.student_id).then(() => {
+					sendData($formData.student_id).then(() => {
 						$checkedInStore = true;
 						disconnect(device);
 						isConnected = false;
@@ -173,7 +169,7 @@
 									name="student_id"
 									id="student_id"
 									placeholder="P00"
-									bind:value={$form.student_id}
+									bind:value={$formData.student_id}
 									{...$constraints.student_id}
 									class="block w-full rounded-md border-0 py-1.5 text-blue-500 shadow-sm ring-1 ring-inset ring-blue-300 placeholder:text-blue-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
 								/>
