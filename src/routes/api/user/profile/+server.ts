@@ -21,7 +21,7 @@ export async function POST({ request, locals }) {
 		const getUserProfile = new GetUserProfileByIDUseCase(userProfileRepository);
 		const profile = await getUserProfile.execute(student_id);
 
-		return json({ profile });
+		return json({ data: profile });
 	} catch (error) {
 		return json({ message: 'Student Profile Not Found' }, { status: 404 });
 	}
