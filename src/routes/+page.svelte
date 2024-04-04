@@ -11,6 +11,7 @@
 	import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
 	import { GetUserProfileUseCase } from '$lib/useCases/GetUserProfile.js';
 	import { UpdateUserProfileUseCase as UpdateUserProfileUseCase } from '$lib/useCases/UpdateUserProfile.js';
+	import { redirect } from '@sveltejs/kit';
 
 	export let data: PageData;
 
@@ -44,7 +45,11 @@
 	onMount(() => {
 		// Watch Live Location
 		// navigator.geolocation.watchPosition(success, error, options);
-		fetchUserProfile();
+		try {
+			fetchUserProfile();
+		} catch (error) {
+			throw redirect(303, '/protected/profile');
+		}
 	});
 
 	let device: unknown;
@@ -57,19 +62,20 @@
 	const getUserProfile = new GetUserProfileUseCase(userProfileRepository);
 
 	const fetchUserProfile = async () => {
-		if (!session) {
-			throw Error();
-		}
-
 		try {
+			if (!session) {
+				throw new Error('Please Update Profile');
+			}
 			const profile = await getUserProfile.execute(session.user.id);
 
 			if (profile) {
 				$form.student_id = profile.student_id; // Assuming 'data' is defined in your wider scope.
 			}
-
-			toast.error('Please Update Profile');
-		} catch (error) {}
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message);
+			}
+		}
 	};
 
 	const { form, errors, constraints, enhance, capture, restore } = superForm(data.form, {
@@ -211,6 +217,13 @@
 				{/if}
 			</div>
 		</form>
+		<div class="flex flex-row items-center gap-2 mt-12">
+			<a
+				href="/leaderboard"
+				class="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				>Leaderboard</a
+			>
+		</div>
 		<!-- <div class="select-none">
 			<p class="mt-1 text-center font-medium leading-6 text-blue-500 pt-10">Are you on campus?</p>
 			<p class="mt-1 text-center text-sm leading-6 text-blue-300">

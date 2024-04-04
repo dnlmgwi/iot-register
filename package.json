@@ -45,6 +45,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@indaco/svelte-iconoir": "^7.5.0",
 		"@supabase/auth-ui-svelte": "^0.2.9",
 		"@supabase/ssr": "^0.0.10",
 		"@supabase/supabase-js": "^2.39.8",

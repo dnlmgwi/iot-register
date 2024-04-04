@@ -132,7 +132,7 @@ export class UserProfileRepository {
 		return `${averageHours.toString().padStart(2, '0')}:${averageMinute.toString().padStart(2, '0')}`;
 	}
 
-	async getAttendanceCount() {
+	async getAttendanceCount(): Promise<AttendanceData[]> {
 		const { data, error } = await this.supabase.rpc('get_student_attendance_count');
 
 		if (error) {

@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@indaco/svelte-iconoir':
+    specifier: ^7.5.0
+    version: 7.5.0(svelte@4.2.12)
   '@supabase/auth-ui-svelte':
     specifier: ^0.2.9
     version: 0.2.9(@supabase/supabase-js@2.39.8)
@@ -388,6 +391,14 @@ packages:
   /@iconify/types@2.0.0:
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
     dev: true
+
+  /@indaco/svelte-iconoir@7.5.0(svelte@4.2.12):
+    resolution: {integrity: sha512-zLiT0kE6m3dQqht4l9xXkBbMRkxUTnptXs/k6cWACizQ7vTjHcWaX4viiVSx1hf1o3aR2INh2vPk+sh0cUCXWA==}
+    peerDependencies:
+      svelte: ^3.59.1 || ^4.0.0
+    dependencies:
+      svelte: 4.2.12
+    dev: false
 
   /@isaacs/cliui@8.0.2:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
