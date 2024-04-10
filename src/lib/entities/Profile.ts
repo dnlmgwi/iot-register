@@ -1,6 +1,7 @@
-import type profileSchema from '$lib/schemas/profileSchema';
-import type { z } from 'zod';
-
-type Profile = z.infer<typeof profileSchema>;
+type Profile = {
+	student_name: string;
+	student_id: string;
+	avatar_url: string;
+};
 
 export type { Profile };
