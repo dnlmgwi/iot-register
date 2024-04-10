@@ -1,5 +1,7 @@
 # IoT BLE Attendance Register - Check-In Management
 
+## Online Devices
+
 This function checks whether the device is enabled before registering the student.
 
 ```SQL
@@ -24,4 +26,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+```
+
+## Timestamp +2 CAT
+
+```SQL
+ALTER TABLE register
+ALTER COLUMN created_at SET DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE '+2');
 ```
