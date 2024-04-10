@@ -171,8 +171,8 @@ export class UserProfileRepository {
 
 	async registerStudent(student_id: string, device_id: string) {
 		const { data, error } = await this.supabase.rpc('register_student', {
-			student_id: student_id,
-			device_id: device_id
+			device_id_param: device_id,
+			student_id: student_id
 		});
 
 		if (error) {

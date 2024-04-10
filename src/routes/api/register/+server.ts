@@ -12,7 +12,7 @@ export async function PUT({ request, locals }) {
 	const userProfileRepository = new UserProfileRepository(locals.supabase);
 	const { student_id, device_id } = await request.json();
 
-	if (!student_id) {
+	if (!student_id || !device_id) {
 		return json({ message: 'Please read the docs' }, { status: 400 });
 	}
 
@@ -22,8 +22,8 @@ export async function PUT({ request, locals }) {
 
 		await registerStudent.execute(student_id, device_id);
 
-		return json({ message: 'Student ID Not Found' });
+		return json({ message: 'Check-In Successful' });
 	} catch (error) {
-		return json({ message: error }, { status: 500 });
+		return json({ message: 'Check-In Failed' }, { status: 400 });
 	}
 }
