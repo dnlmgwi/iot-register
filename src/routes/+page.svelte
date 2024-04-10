@@ -5,13 +5,14 @@
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import BleStatus from '$lib/components/BLEStatus.svelte';
+	import NotificationBanner from '$lib/components/NotificationBanner.svelte';
 	import { checkedInStore, triggerReset } from '$lib/stores/checkedInStores';
 	import { registerSchema } from '$lib/schemas/registerSchema';
 	import { DiplomaClass } from '$lib/utils/geofencing.js';
 
 	export let data: PageData;
 
-	$: ({ session, supabase, form } = data);
+	$: ({ session, supabase, form, profile } = data);
 
 	const {
 		form: formData,
@@ -118,6 +119,9 @@
 
 <main>
 	<Toaster />
+	{#if profile == null || profile.student_id == null}
+	<NotificationBanner/>
+	{/if}
 	<div class="flex flex-col items-center justify-center min-h-screen">
 		<div>
 			{#if session != null}
