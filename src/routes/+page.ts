@@ -22,6 +22,6 @@ export const load = async ({ parent }) => {
 	if (result.kind === 'success') {
 		return { form, profile: result.data };
 	} else {
-		return { form, noProfile: true };
+		return { form, profile: null };
 	}
 };
