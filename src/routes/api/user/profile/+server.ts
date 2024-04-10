@@ -1,12 +1,12 @@
 import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
 import { GetUserProfileByIDUseCase } from '$lib/useCases/GetUserProfileByID.js';
 import { rateLimiter } from '$lib/utils/rateLimiter.js';
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 
 export async function POST({ request, locals }) {
 	if (rateLimiter(request)) {
 		// If the rate limit is exceeded
-		return new Response('Rate limit exceeded. Try again later.', { status: 429 });
+		return error(429, 'Rate limit exceeded. Try again later.');
 	}
 
 	const userProfileRepository = new UserProfileRepository(locals.supabase);
@@ -14,15 +14,15 @@ export async function POST({ request, locals }) {
 	const { student_id } = await request.json();
 
 	if (!student_id) {
-		return json({ message: 'Please read the docs' }, { status: 400 });
+		return error(500, 'Please read the docs');
 	}
 
-	try {
-		const getUserProfile = new GetUserProfileByIDUseCase(userProfileRepository);
-		const profile = await getUserProfile.execute(student_id);
+	const getUserProfile = new GetUserProfileByIDUseCase(userProfileRepository);
+	const result = await getUserProfile.execute(student_id);
 
-		return json({ data: profile });
-	} catch (error) {
-		return json({ message: 'Student Profile Not Found' }, { status: 404 });
+	if (result.kind === 'success') {
+		return json(result.data);
+	} else {
+		error(500, result.error.message);
 	}
 }

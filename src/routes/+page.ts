@@ -17,10 +17,11 @@ export const load = async ({ parent }) => {
 	const userProfileRepository = new UserProfileRepository(supabase);
 	const getUserProfile = new GetUserProfileUseCase(userProfileRepository);
 
-	try {
-		const profile = await getUserProfile.execute(session.user.id);
-		return { form, profile };
-	} catch {
-		return { form };
+	const result = await getUserProfile.execute(session.user.id);
+
+	if (result.kind === 'success') {
+		return { form, profile: result.data };
+	} else {
+		return { form, noProfile: true };
 	}
 };

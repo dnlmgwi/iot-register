@@ -7,7 +7,11 @@ export const load = async ({ locals: { supabase } }) => {
 	const userProfileRepository = new UserProfileRepository(supabase);
 	const getAttendanceCount = new GetAttendanceCountTop15UseCase(userProfileRepository);
 
-	const attendaceCount = await getAttendanceCount.execute();
+	const result = await getAttendanceCount.execute();
 
-	return { attendaceCount };
+	if (result.kind === 'success') {
+		return { attendaceCount: result.data };
+	} else {
+		return { attendaceCount: 0 };
+	}
 };

@@ -3,12 +3,13 @@ import type { ProfileValueObject } from '$lib/ValueObjects/Profile';
 import type { Profile } from '$lib/entities/Profile';
 import type { AttendanceData } from '$lib/entities/Student';
 import { addAttendanceRating } from '$lib/utils/attendanceRating';
+import type { Result } from '$lib/utils/result';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 export class UserProfileRepository {
 	constructor(private supabase: SupabaseClient) {}
 
-	async getUserProfile(userId: string): Promise<Profile> {
+	async getUserProfile(userId: string): Promise<Result<Profile, Error>> {
 		const { data, error } = await this.supabase
 			.from('profile')
 			.select('student_id, student_name, avatar_url')
@@ -16,17 +17,17 @@ export class UserProfileRepository {
 			.single();
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
 		if (!data) {
-			throw new Error('Fetch failed without a specific error.');
+			return { kind: 'error', error: Error('Data Not Found') };
 		}
 
-		return data;
+		return { kind: 'success', data: data };
 	}
 
-	async getUserProfileByStudentID(student_id: string): Promise<Profile> {
+	async getUserProfileByStudentID(student_id: string): Promise<Result<Profile, Error>> {
 		const { data, error } = await this.supabase
 			.from('profile')
 			.select('student_id, student_name, avatar_url')
@@ -34,88 +35,95 @@ export class UserProfileRepository {
 			.single();
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
 		if (!data) {
-			throw new Error('Fetch failed without a specific error.');
+			return { kind: 'error', error: Error('Data Not Found') };
 		}
 
-		return data;
+		return { kind: 'success', data: data };
 	}
 
-	async updateUserProfile(profile: ProfileValueObject): Promise<Error | null> {
+	async updateUserProfile(profile: ProfileValueObject): Promise<Result<null, Error>> {
 		const { error } = await this.supabase.from('profile').upsert(profile);
 
-		return error == null ? error : new Error(error.message);
+		if (error) {
+			return { kind: 'error', error: Error(error.message) };
+		}
+
+		return { kind: 'success', data: null };
 	}
 
-	async uploadProfilePicture(userId: string, file: File): Promise<string> {
+	async uploadProfilePicture(userId: string, file: File): Promise<Result<string, Error>> {
 		const { error, data } = await this.supabase.storage
 			.from('uploads')
 			.upload(`${userId}/${file.name}`, file);
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
 		if (!data) {
-			throw new Error('Upload failed without a specific error.');
+			return { kind: 'error', error: Error('No Data Found') };
 		}
 
-		return data.path;
+		return { kind: 'success', data: data.path };
 	}
 
-	async downloadImage(path: string): Promise<Blob> {
+	async downloadImage(path: string): Promise<Result<Blob, Error>> {
 		const { data, error } = await this.supabase.storage.from('uploads').download(path);
 
 		if (error) {
-			throw Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
 		if (!data) {
-			throw new Error('Fetching failed without a specific error.');
+			return { kind: 'error', error: Error('No Data Found') };
 		}
 
-		return data;
+		return { kind: 'success', data: data };
 	}
 
-	async getPublicUrl(path: string): Promise<string> {
+	async getPublicUrl(path: string): Promise<Result<string, Error>> {
 		const { data } = await this.supabase.storage.from('uploads').getPublicUrl(path);
 
 		if (!data) {
-			throw new Error('Fetching failed without a specific error.');
+			return { kind: 'error', error: Error('No Data Found') };
 		}
 
-		return data.publicUrl;
+		return { kind: 'success', data: data.publicUrl };
 	}
 
-	async getTotalAttendanceCount(student_id: string) {
+	async getTotalAttendanceCount(student_id: string): Promise<Result<number, Error>> {
 		const { error, count } = await this.supabase
 			.from('register')
 			.select('*', { count: 'exact' })
 			.eq('student_id', student_id);
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
-		return count;
+		if (count === null) {
+			return { kind: 'error', error: Error('No Data Found') };
+		}
+
+		return { kind: 'success', data: count };
 	}
 
-	async getAverageEntryTime(student_id: string): Promise<string> {
+	async getAverageEntryTime(student_id: string): Promise<Result<string, Error>> {
 		const { data, error } = await this.supabase
 			.from('register')
 			.select('created_at')
 			.eq('student_id', student_id);
 
 		if (error) {
-			console.error('Error fetching data:', error);
-			throw Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
 		if (data.length === 0) {
-			return 'No data available';
+			return { kind: 'error', error: Error('No Data Found') };
 		}
 
 		const timezoneOffsetHours = 2; // For +02:00 timezone
@@ -130,78 +138,84 @@ export class UserProfileRepository {
 		const averageHours = Math.floor(averageMinutes / 60);
 		const averageMinute = Math.round(averageMinutes % 60);
 
-		return `${averageHours.toString().padStart(2, '0')}:${averageMinute.toString().padStart(2, '0')}`;
+		return {
+			kind: 'success',
+			data: `${averageHours.toString().padStart(2, '0')}:${averageMinute.toString().padStart(2, '0')}`
+		};
 	}
 
-	async getAttendanceCount(): Promise<AttendanceData[]> {
+	async getAttendanceCount(): Promise<Result<AttendanceData[], Error>> {
 		const { data, error } = await this.supabase.rpc('get_student_attendance_count');
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
-		return data;
+		return { kind: 'success', data: data };
 	}
 
-	async getAttendanceCountTop15(): Promise<AttendanceData[]> {
+	async getAttendanceCountTop15(): Promise<Result<AttendanceData[], Error>> {
 		const { data, error } = await this.supabase.rpc('get_student_attendance_count_top_15');
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
-
-		return data;
+		return { kind: 'success', data: data };
 	}
 
-	async getAttendanceCountByModule(module_id: string) {
+	async getAttendanceCountByModule(module_id: string): Promise<Result<string, Error>> {
 		const { data, error } = await this.supabase.rpc('get_student_attendance_count_by_module', {
 			module_id: module_id
 		});
 
 		if (data.length === 0) {
-			throw new Error('No data found');
+			return { kind: 'error', error: Error('No Data Found') };
 		}
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
-		return data;
+		return { kind: 'success', data: data };
 	}
 
-	async registerStudent(student_id: string, device_id: string) {
+	async registerStudent(student_id: string, device_id: string): Promise<Result<string, Error>> {
 		const { data, error } = await this.supabase.rpc('register_student', {
 			device_id_param: device_id,
 			student_id: student_id
 		});
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
-		return data;
+		return { kind: 'success', data: data };
 	}
 
-	async getAttendanceCountByModuleWithRating(module_id: string) {
+	async getAttendanceCountByModuleWithRating(
+		module_id: string
+	): Promise<Result<AttendanceData[], Error>> {
 		const { data, error } = await this.supabase.rpc('get_student_attendance_count_by_module', {
 			module_id: module_id
 		});
 
 		if (data.length === 0) {
-			throw new Error('No data found');
+			return { kind: 'error', error: Error('No Data Found') };
 		}
 
 		// Calculate ratings
 		const attendanceWithRatings = addAttendanceRating(data);
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
-		return attendanceWithRatings;
+		return { kind: 'success', data: attendanceWithRatings };
 	}
 
-	async getTotalAttendancePerMonth(student_id: string): Promise<MonthlyAttendance[]> {
+	async getTotalAttendancePerMonth(
+		student_id: string
+	): Promise<Result<MonthlyAttendance[], Error>> {
 		// Assuming 'this.supabase' is properly typed elsewhere in your code.
 		const { data, error } = await this.supabase
 			.from('register')
@@ -209,11 +223,11 @@ export class UserProfileRepository {
 			.eq('student_id', student_id);
 
 		if (error) {
-			throw new Error(error.message);
+			return { kind: 'error', error: Error(error.message) };
 		}
 
 		if (!data) {
-			throw new Error('Fetching failed without a specific error.');
+			return { kind: 'error', error: Error('No Data Found') };
 		}
 
 		const monthAttendance = data.reduce((acc: Record<string, number>, row: RegisterRow) => {
@@ -225,11 +239,16 @@ export class UserProfileRepository {
 			return acc;
 		}, {});
 
-		return Object.entries(monthAttendance).map(
+		const totalAttendancePerMonth = Object.entries(monthAttendance).map(
 			([Month, AttendanceCount]): MonthlyAttendance => ({
 				Month,
 				AttendanceCount
 			})
 		);
+
+		return {
+			kind: 'success',
+			data: totalAttendancePerMonth
+		};
 	}
 }
