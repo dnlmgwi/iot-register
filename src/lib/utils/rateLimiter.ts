@@ -1,7 +1,7 @@
 // src/lib/rateLimiter.ts
 
 const rateLimitWindowMs = 60000; // 1 minute window
-const maxRequests = 5; // Max 5 requests per window per client
+const maxRequests = 10; // Max 10 requests per window per client
 const clientRequests: Map<string, number[]> = new Map(); // Store client requests timestamps
 
 export function rateLimiter(req: Request): boolean {
