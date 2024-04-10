@@ -21,15 +21,15 @@
 	</div>
 	<div class="flex flex-wrap items-center gap-x-4 gap-y-2">
 		<p class="text-sm leading-6 text-gray-900">
-			<strong class="font-semibold">Create your Profile</strong><svg
+			<strong class="font-semibold">Com'on Create a Profile</strong><svg
 				viewBox="0 0 2 2"
 				class="mx-2 inline h-0.5 w-0.5 fill-current"
 				aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg
-			>You are testing our platform, your feedback is appreciated.
+			>Create a Profile To View Your Attendance Performance. Your Feedback Is Appreciated.
 		</p>
 		<a
 			href="/auth"
-			class="flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+			class="flex-none rounded-full bg-blue-600 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
 			>Sign In<span aria-hidden="true">&rarr;</span></a
 		>
 	</div>
