@@ -64,14 +64,11 @@
 	}
 </script>
 
-{#if profile == null || profile.student_id == null}
-	<NotificationBanner />
-{/if}
-<div class="flex flex-col items-center justify-center min-h-screen">
-	<div class="p-10">
-		<div class="flex justify-center items-center h-full">
-			<div class="flex justify-center">
-				{#if data.stats}
+{#if data.stats}
+	<div class="flex flex-col items-center justify-center min-h-screen">
+		<div class="p-10">
+			<div class="flex justify-center items-center h-full">
+				<div class="flex justify-center">
 					<div class="border-b border-gray-900/10 pb-12">
 						<h2 class="text-base font-semibold leading-7 text-blue-600">MyStats</h2>
 						<p class="mt-1 text-base leading-7 text-blue-600">
@@ -110,26 +107,46 @@
 							</div>
 						</div>
 					</div>
-					<div class="mt-6 flex items-center justify-center gap-x-6">
-						<p>
-							<a href="/" class="text-base font-semibold leading-7 text-blue-600"
-								><button
-									class="rounded-full border-2 border-blue-600 px-6 py-4 text-sm font-semibold text-blue-600 hover:bg-blue-600 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600"
-								>
-									Back</button
-								></a
-							>
-						</p>
-					</div>
-				{:else}
-					<div>
-						<h2 class="text-base font-semibold leading-7 text-blue-600">MyStats No Found</h2>
-						<p class="mt-1 text-base leading-7 text-blue-600">
-							Please complete profile to see your overall class attendance stats.
-						</p>
-					</div>
-				{/if}
+				</div>
+			</div>
+			<div class="mt-6 flex items-center justify-center gap-x-6">
+				<p>
+					<a href="/" class="text-base font-semibold leading-7 text-blue-600"
+						><button
+							class="rounded-full border-2 border-blue-600 px-6 py-4 text-sm font-semibold text-blue-600 hover:bg-blue-600 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600"
+						>
+							Back</button
+						></a
+					>
+				</p>
 			</div>
 		</div>
 	</div>
-</div>
+{:else}
+	{#if profile === null || profile.student_id == null}
+		<NotificationBanner />
+	{/if}
+	<div class="flex flex-col items-center justify-center min-h-screen">
+		<div class="p-10">
+			<div class="flex justify-center items-center h-full">
+				<div class="flex justify-center">
+					<div class="border-b border-gray-900/10 pb-12">
+						<h2 class="text-base font-semibold leading-7 text-blue-600">MyStats Not Found</h2>
+						<p class="mt-1 text-base leading-7 text-blue-600">Please complete your profile.</p>
+					</div>
+				</div>
+			</div>
+			<div class="mt-6 flex items-center justify-center gap-x-6">
+				<p>
+					<a href="/" class="text-base font-semibold leading-7 text-blue-600"
+						><button
+							class="rounded-full border-2 border-blue-600 px-6 py-4 text-sm font-semibold text-blue-600 hover:bg-blue-600 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600"
+						>
+							Back</button
+						></a
+					>
+				</p>
+			</div>
+		</div>
+	</div>
+{/if}

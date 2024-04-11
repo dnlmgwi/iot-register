@@ -57,29 +57,33 @@
 	}
 
 	const uploadAvatar = async () => {
-		try {
-			uploading = true;
+		uploading = true;
 
-			if (!files || files.length === 0) {
-				throw new Error('You must select an image to upload.');
+		if (!files || files.length === 0) {
+			throw new Error('You must select an image to upload.');
+		}
+
+		const file = files[0];
+		const result = await uploadProfilePicture.execute(userId, file);
+
+		if (result.kind === 'success') {
+			const publicUrl = await getPublicUrl.execute(result.data);
+
+			if (publicUrl.kind === 'success') {
+				url = publicUrl.data;
+
+				setTimeout(() => {
+					dispatch('upload', { publicUrl });
+				}, 100);
+
+				toast('Profile Picture Uploaded', { icon: '✅' });
+				uploading = false;
+			} else {
+				toast.error(publicUrl.error.message);
+				uploading = false;
 			}
-
-			const file = files[0];
-			const data = await uploadProfilePicture.execute(userId, file);
-			const publicUrl = await getPublicUrl.execute(data);
-
-			url = publicUrl;
-
-			setTimeout(() => {
-				dispatch('upload', { publicUrl });
-			}, 100);
-
-			toast('Profile Picture Uploaded', { icon: '✅' });
-		} catch (error) {
-			if (error instanceof Error) {
-				toast.error(error.message);
-			}
-		} finally {
+		} else {
+			toast.error(result.error.message);
 			uploading = false;
 		}
 	};

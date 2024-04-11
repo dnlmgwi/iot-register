@@ -47,16 +47,16 @@ export const actions = {
 		const userProfileRepository = new UserProfileRepository(supabase);
 		const updateUserProfile = new UpdateUserProfileUseCase(userProfileRepository);
 
-		const error = await updateUserProfile.execute(profileData);
+		const result = await updateUserProfile.execute(profileData);
 
-		if (error) {
+		if (result.kind === 'error') {
 			return fail(500, {
 				form
 			});
+		} else {
+			return {
+				form
+			};
 		}
-
-		return {
-			form
-		};
 	}
 };

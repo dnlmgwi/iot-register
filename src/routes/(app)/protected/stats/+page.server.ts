@@ -41,9 +41,9 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 		};
 
 		const results = await Promise.all([
-			getTotalAttendanceCountByMonth.execute(result.data.student_id),
 			getTotalAttendanceCount.execute(result.data.student_id),
-			getAverageEntryTime.execute(result.data.student_id)
+			getAverageEntryTime.execute(result.data.student_id),
+			getTotalAttendanceCountByMonth.execute(result.data.student_id)
 		]);
 
 		results.forEach((result, index) => {
