@@ -44,6 +44,8 @@ $$ LANGUAGE plpgsql;
 
 ### Function to Toggle Functionality State
 
+Toggling the function state will cause the database to wait for 10 minutes (pg_sleep(600)) and will to check if the last execution time is older than 10 minutes. If the last execution time is indeed older than 10 minutes, it disables the device's functionality. Otherwise, it remains enabled.
+
 ```SQL
 CREATE OR REPLACE FUNCTION toggle_device_function_state(device_id UUID)
 RETURNS VOID AS $$
@@ -58,6 +60,15 @@ BEGIN
         ON CONFLICT (device_id) DO NOTHING; -- If already scheduled, do nothing
     ELSE
         DELETE FROM device_function_schedule WHERE device_id = toggle_device_function_state.device_id;
+    END IF;
+
+    -- Check if the last execution time is older than 10 minutes
+    IF NOT function_enabled THEN
+        PERFORM pg_sleep(600); -- Sleep for 10 minutes
+        DELETE FROM device_function_schedule WHERE device_id = toggle_device_function_state.device_id AND last_execution < CURRENT_TIMESTAMP - INTERVAL '10 minutes';
+        IF NOT FOUND THEN
+            UPDATE device_function SET function_enabled = FALSE WHERE device_id = toggle_device_function_state.device_id;
+        END IF;
     END IF;
 END;
 $$ LANGUAGE plpgsql;
