@@ -1,10 +1,13 @@
 <script lang="ts">
 	import BarGraph from '$lib/components/BarGraph.svelte';
+	import NotificationBanner from '$lib/components/NotificationBanner.svelte';
 	import profileSchema from '$lib/schemas/profileSchema';
 	import toast from 'svelte-french-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 
 	export let data;
+
+	$: ({ session, profile } = data);
 
 	let disableName: boolean;
 	let disableID: boolean;
@@ -61,17 +64,14 @@
 	}
 </script>
 
+{#if profile == null || profile.student_id == null}
+	<NotificationBanner />
+{/if}
 <div class="flex flex-col items-center justify-center min-h-screen">
 	<div class="p-10">
 		<div class="flex justify-center items-center h-full">
 			<div class="flex justify-center">
-				<form
-					class="form-widget"
-					method="post"
-					action="?/update"
-					use:enhance
-					on:submit|preventDefault={handleSubmit}
-				>
+				{#if data.stats}
 					<div class="border-b border-gray-900/10 pb-12">
 						<h2 class="text-base font-semibold leading-7 text-blue-600">MyStats</h2>
 						<p class="mt-1 text-base leading-7 text-blue-600">
@@ -121,7 +121,14 @@
 							>
 						</p>
 					</div>
-				</form>
+				{:else}
+					<div>
+						<h2 class="text-base font-semibold leading-7 text-blue-600">MyStats No Found</h2>
+						<p class="mt-1 text-base leading-7 text-blue-600">
+							Please complete profile to see your overall class attendance stats.
+						</p>
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>

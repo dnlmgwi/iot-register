@@ -1,6 +1,6 @@
 import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
 import { GetUserProfileByIDUseCase } from '$lib/useCases/GetUserProfileByID.js';
-import { rateLimiter } from '$lib/utils/rateLimiter.js';
+import { rateLimiter } from '$lib/services/rateLimiter.js';
 import { error, json } from '@sveltejs/kit';
 
 export async function POST({ request, locals }) {

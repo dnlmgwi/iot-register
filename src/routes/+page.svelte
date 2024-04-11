@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { disconnect, sendData, connect } from '$lib/utils/ble.js';
+	import { disconnect, sendData, connect } from '$lib/services/ble.js';
 	import toast, { Toaster } from 'svelte-french-toast';
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -8,7 +8,7 @@
 	import NotificationBanner from '$lib/components/NotificationBanner.svelte';
 	import { checkedInStore, triggerReset } from '$lib/stores/checkedInStores';
 	import { registerSchema } from '$lib/schemas/registerSchema';
-	import { DiplomaClass } from '$lib/utils/geofencing.js';
+	import { DiplomaClass } from '$lib/services/geofencing.js';
 
 	export let data: PageData;
 

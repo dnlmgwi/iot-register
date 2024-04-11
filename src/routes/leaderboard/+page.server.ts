@@ -10,8 +10,8 @@ export const load = async ({ locals: { supabase } }) => {
 	const result = await getAttendanceCount.execute();
 
 	if (result.kind === 'success') {
-		return { attendaceCount: result.data };
+		return { attendanceCount: result.data };
 	} else {
-		return { attendaceCount: 0 };
+		return { attendanceCount: [] };
 	}
 };

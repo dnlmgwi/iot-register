@@ -1,6 +1,6 @@
 import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.js';
 import { GetAttendanceCountUseCase } from '$lib/useCases/GetAttendanceCount.js';
-import { rateLimiter } from '$lib/utils/rateLimiter.js';
+import { rateLimiter } from '$lib/services/rateLimiter.js';
 import { error, json } from '@sveltejs/kit';
 
 export async function GET({ request, locals }) {

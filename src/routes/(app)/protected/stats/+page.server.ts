@@ -9,6 +9,8 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { GetAverageEntryTimeUseCase } from '$lib/useCases/GetAverageEntryTime';
 import { GetTotalAttendanceCountUseCase } from '$lib/useCases/GetTotalAttendanceCount';
 import { GetTotalAttendanceCountByMonthUseCase } from '$lib/useCases/GetTotalAttendanceCountByMonth.js';
+import type { AttendanceStats } from '$lib/types.js';
+import type { MonthlyAttendance } from '$lib/ValueObjects/MonthlyAttendance.js';
 
 export const load = async ({ locals: { supabase, getSession }, request }) => {
 	const form = await superValidate(request, profileSchema);
@@ -22,33 +24,56 @@ export const load = async ({ locals: { supabase, getSession }, request }) => {
 	const userProfileRepository = new UserProfileRepository(supabase);
 	const getUserProfile = new GetUserProfileUseCase(userProfileRepository);
 
-	const profile = await getUserProfile.execute(session.user.id);
+	const result = await getUserProfile.execute(session.user.id);
 
-	if (profile.student_id == null) {
-		throw Error('Please Complete Your Profile');
+	if (result.kind === 'success') {
+		//Get Stats
+		const getAverageEntryTime = new GetAverageEntryTimeUseCase(userProfileRepository);
+		const getTotalAttendanceCount = new GetTotalAttendanceCountUseCase(userProfileRepository);
+		const getTotalAttendanceCountByMonth = new GetTotalAttendanceCountByMonthUseCase(
+			userProfileRepository
+		);
+
+		const data: AttendanceStats = {
+			attendanceCount: 0.0,
+			attendanceAvgEntryTime: '',
+			attendanceCountByMonth: []
+		};
+
+		const results = await Promise.all([
+			getTotalAttendanceCountByMonth.execute(result.data.student_id),
+			getTotalAttendanceCount.execute(result.data.student_id),
+			getAverageEntryTime.execute(result.data.student_id)
+		]);
+
+		results.forEach((result, index) => {
+			if (result.kind === 'success') {
+				switch (index) {
+					case 0:
+						data.attendanceCount = result.data as number;
+						break;
+					case 1:
+						data.attendanceAvgEntryTime = result.data as string;
+						break;
+					case 2:
+						data.attendanceCountByMonth = result.data as MonthlyAttendance[];
+						break;
+				}
+			} else {
+				console.error(`Operation ${index} failed:`, result.error);
+				//TODO: Handle errors appropriately
+			}
+		});
+
+		return {
+			session,
+			profile: result.data,
+			form,
+			stats: { ...data }
+		};
+	} else {
+		return { form, session, profile: null };
 	}
-
-	//Get Stats
-	const getAverageEntryTime = new GetAverageEntryTimeUseCase(userProfileRepository);
-	const getTotalAttendanceCount = new GetTotalAttendanceCountUseCase(userProfileRepository);
-	const getTotalAttendanceCountByMonth = new GetTotalAttendanceCountByMonthUseCase(
-		userProfileRepository
-	);
-
-	const attendanceCount = await getTotalAttendanceCount.execute(profile.student_id);
-	const attendanceAvgEntryTime = await getAverageEntryTime.execute(profile.student_id);
-	const getTotalCountByMonth = await getTotalAttendanceCountByMonth.execute(profile.student_id);
-
-	return {
-		session,
-		profile,
-		form,
-		stats: {
-			attendanceCount: attendanceCount,
-			attendanceAvgEntryTime: attendanceAvgEntryTime,
-			attendanceCountByMonth: getTotalCountByMonth
-		}
-	};
 };
 
 export const actions = {

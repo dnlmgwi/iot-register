@@ -3,19 +3,17 @@
 	import { Toaster } from 'svelte-french-toast';
 	import type { PageData } from './$types';
 	import Leaderboard from '$lib/components/Leaderboard.svelte';
-	import NotificationBanner from '$lib/components/NotificationBanner.svelte';
 
 	export let data: PageData;
 
 	onMount(() => {});
 
-	$: ({ attendaceCount } = data);
+	$: ({ attendanceCount: attendanceCount } = data);
 </script>
 
 <Toaster />
 <main class="flex flex-col items-center justify-center min-h-screen">
-	
-	<Leaderboard data={attendaceCount}></Leaderboard>
+	<Leaderboard data={attendanceCount}></Leaderboard>
 	<div class="mt-6 flex items-center justify-between gap-x-6">
 		<a href="/" class="text-base font-semibold leading-7 text-blue-600"
 			><button
