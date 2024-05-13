@@ -2,7 +2,7 @@ import { UserProfileRepository } from '$lib/repositories/UserProfileRepository.j
 import { RegisterStudentUseCase } from '$lib/useCases/RegisterUser.js';
 import { rateLimiter } from '$lib/services/rateLimiter.js';
 import { error, json } from '@sveltejs/kit';
-import { message } from 'sveltekit-superforms/client';
+// import { message } from 'sveltekit-superforms/client';
 
 export async function PUT({ request, locals }) {
 	if (rateLimiter(request)) {
@@ -29,6 +29,6 @@ export async function PUT({ request, locals }) {
 
 		return json(result.data);
 	} else {
-		error(400, result.error.message);
+		return json(result.error.message, { status: 500 });
 	}
 }

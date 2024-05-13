@@ -19,6 +19,6 @@ export async function GET({ request, locals }) {
 	if (result.kind === 'success') {
 		return json(result.data);
 	} else {
-		error(500, result.error.message);
+		return json(result.error.message, { status: 500 });
 	}
 }
