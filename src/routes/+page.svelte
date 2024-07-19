@@ -119,9 +119,9 @@
 
 <main>
 	<Toaster />
-	{#if profile == null || profile.student_id == null}
+	<!-- {#if profile == null || profile.student_id == null}
 		<NotificationBanner />
-	{/if}
+	{/if} -->
 	<div class="flex flex-col items-center justify-center min-h-screen">
 		<!-- <div>
 			{#if session != null}
