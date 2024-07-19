@@ -120,10 +120,10 @@
 <main>
 	<Toaster />
 	{#if profile == null || profile.student_id == null}
-	<NotificationBanner/>
+		<NotificationBanner />
 	{/if}
 	<div class="flex flex-col items-center justify-center min-h-screen">
-		<div>
+		<!-- <div>
 			{#if session != null}
 				<div class="flex flex-col sm:flex-row items-center gap-2">
 					<p class="text-base font-semibold leading-7 text-blue-600">
@@ -145,7 +145,7 @@
 					>
 				</div>
 			{/if}
-		</div>
+		</div> -->
 		<!-- Your centered content goes here -->
 		<div class="p-8">
 			<BleStatus isSuccessful={$checkedInStore}></BleStatus>
@@ -184,7 +184,7 @@
 					Check In</button
 				>
 
-				{#if session != null}
+				<!-- {#if session != null}
 					<p>
 						<a href="protected/profile" class="text-base font-semibold leading-7 text-blue-600"
 							><button
@@ -203,16 +203,16 @@
 							></a
 						>
 					</p>
-				{/if}
+				{/if} -->
 			</div>
 		</form>
-		<div class="flex flex-row items-center gap-2 mt-12">
+		<!-- <div class="flex flex-row items-center gap-2 mt-12">
 			<a
 				href="/leaderboard"
 				class="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 				>Leaderboard</a
 			>
-		</div>
+		</div> -->
 		<!-- <div class="select-none">
 			<p class="mt-1 text-center font-medium leading-6 text-blue-500 pt-10">Are you on campus?</p>
 			<p class="mt-1 text-center text-sm leading-6 text-blue-300">
