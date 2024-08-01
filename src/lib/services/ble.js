@@ -35,7 +35,7 @@ export async function sendData(studentNumber) {
 export async function connect() {
 
 	device = await navigator.bluetooth.requestDevice({
-		filters: [{ name: 'NX10' }],
+		filters: [{ name: 'NACIT IoT' }],
 		optionalServices: [PUBLIC_SERVICE_UUID]
 	});
 
