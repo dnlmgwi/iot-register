@@ -30,4 +30,4 @@
 	});
 </script>
 
-<slot />
+<div class="bg-slate-50"><slot /></div>
