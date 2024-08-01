@@ -1,11 +1,11 @@
 {
-  "name": "IoT Register",
-  "short_name": "IoTR",
+	"name": "NACIT Check-In",
+	"short_name": "NACIT Hub",
 	"theme_color": "#ffffff",
-  "background_color": "#1e88e5",
-  "display": "minimal-ui",
-  "start_url": "/",
-  "icons": [
+	"background_color": "#1e88e5",
+	"display": "minimal-ui",
+	"start_url": "/",
+	"icons": [
 		{
 			"src": "/icon.png",
 			"sizes": "512x512"
