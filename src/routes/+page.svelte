@@ -9,6 +9,7 @@
 	import { checkedInStore, triggerReset } from '$lib/stores/checkedInStores';
 	import { registerSchema } from '$lib/schemas/registerSchema';
 	import { DiplomaClass } from '$lib/services/geofencing.js';
+	import logo from '$lib/assets/images/coat_of_arms_of_malawi.webp';
 
 	export let data: PageData;
 
@@ -79,7 +80,7 @@
 
 	const fetchUserProfile = async () => {
 		if (data.profile) {
-			$formData.student_id = data.profile.student_id; // Assuming 'data' is defined in your wider scope.
+			$formData.student_id = data.profile.student_id;
 		}
 	};
 
@@ -126,39 +127,40 @@
 		<!-- <div>
 			{#if session != null}
 				<div class="flex flex-col sm:flex-row items-center gap-2">
-					<p class="text-base font-semibold leading-7 text-blue-600">
+					<p class="text-base font-semibold leading-7 text-neutral-600">
 						You are logged in as {session.user.email}
 					</p>
 					<button
 						on:click={() => supabase.auth.signOut()}
-						class="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+						class="rounded-full bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 						>Sign out</button
 					>
 				</div>
 			{:else}
 				<div class="flex flex-row items-center gap-2">
-					<h2 class="text-base font-semibold leading-7 text-blue-600">View Your Track Record?</h2>
+					<h2 class="text-base font-semibold leading-7 text-neutral-600">View Your Track Record?</h2>
 					<a
 						href="auth"
-						class="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+						class="rounded-full bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 						>Sign In</a
 					>
 				</div>
 			{/if}
 		</div> -->
 		<!-- Your centered content goes here -->
+		<img alt="logo" src={logo} class="w-20" />
 		<div class="p-8">
 			<BleStatus isSuccessful={$checkedInStore}></BleStatus>
 		</div>
 		<form method="POST" use:enhance>
 			<div class="space-y-12 w-full">
-				<div class="border-b border-blue-900/10 pb-12">
-					<h2 class="text-base font-semibold leading-7 text-blue-600">BLE Check-In</h2>
-					<p class="mt-1 text-sm leading-6 text-blue-300">Please check-in as you enter class.</p>
+				<div class="border-b border-neutral-900/10 pb-12">
+					<h2 class="text-base font-semibold leading-7 text-neutral-700">NACIT Check-In</h2>
+					<p class="mt-1 text-sm leading-6 text-neutral-500">Please check-in as you enter class.</p>
 
 					<div class="mt-7 grid grid-cols-1 gap-x-6 gap-y-8">
 						<div class="sm:col-span-3">
-							<label for="student_id" class="block text-sm font-medium leading-6 text-blue-500"
+							<label for="student_id" class="block text-sm font-medium leading-6 text-neutral-500"
 								>Student Number</label
 							>
 							<div class="mt-2">
@@ -169,7 +171,7 @@
 									placeholder="P00"
 									bind:value={$formData.student_id}
 									{...$constraints.student_id}
-									class="block w-full rounded-md border-0 py-1.5 text-blue-500 shadow-sm ring-1 ring-inset ring-blue-300 placeholder:text-blue-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+									class="block w-full rounded-md border-0 py-1.5 text-neutral-500 shadow-sm ring-1 ring-inset ring-neutral-300 placeholder:text-neutral-400 focus:ring-2 focus:ring-inset focus:ring-neutral-600 sm:text-sm sm:leading-6"
 								/>
 							</div>
 						</div>
@@ -179,25 +181,25 @@
 
 			<div class="mt-6 flex items-center justify-center gap-x-6">
 				<button
-					class="rounded-full bg-blue-600 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+					class="rounded-full bg-neutral-700 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 				>
 					Check In</button
 				>
 
 				<!-- {#if session != null}
 					<p>
-						<a href="protected/profile" class="text-base font-semibold leading-7 text-blue-600"
+						<a href="protected/profile" class="text-base font-semibold leading-7 text-neutral-600"
 							><button
-								class="rounded-full bg-blue-600 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								class="rounded-full bg-neutral-600 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 							>
 								Profile</button
 							></a
 						>
 					</p>
 					<p>
-						<a href="protected/stats" class="text-base font-semibold leading-7 text-blue-600"
+						<a href="protected/stats" class="text-base font-semibold leading-7 text-neutral-600"
 							><button
-								class="rounded-full bg-blue-600 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								class="rounded-full bg-neutral-600 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 							>
 								Stats</button
 							></a
@@ -209,16 +211,16 @@
 		<!-- <div class="flex flex-row items-center gap-2 mt-12">
 			<a
 				href="/leaderboard"
-				class="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				class="rounded-full bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 				>Leaderboard</a
 			>
 		</div> -->
 		<!-- <div class="select-none">
-			<p class="mt-1 text-center font-medium leading-6 text-blue-500 pt-10">Are you on campus?</p>
-			<p class="mt-1 text-center text-sm leading-6 text-blue-300">
+			<p class="mt-1 text-center font-medium leading-6 text-neutral-500 pt-10">Are you on campus?</p>
+			<p class="mt-1 text-center text-sm leading-6 text-neutral-300">
 				Lat: {lat}, Long: {long}
 			</p>
-			<p class="mt-1 text-center text-sm leading-6 text-blue-300">
+			<p class="mt-1 text-center text-sm leading-6 text-neutral-300">
 				{isOnCampus}
 			</p>
 		</div> -->
